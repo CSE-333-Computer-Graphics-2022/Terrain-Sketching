@@ -14,6 +14,7 @@ find_package(GLEW REQUIRED)
 set(SOURCES
 	"src/main.cpp"
 	"src/utils/utils.cpp"
+	"src/terrain/terrain.cpp"
 	"depends/imgui/imgui_impl_glfw.cpp"
 	"depends/imgui/imgui_impl_opengl3.cpp"
 	"depends/imgui/imgui.cpp"

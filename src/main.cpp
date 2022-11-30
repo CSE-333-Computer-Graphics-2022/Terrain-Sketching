@@ -9,6 +9,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 
+#include <terrain/terrain.h>
+
 GLint vModel_uniform, vView_uniform, vProjection_uniform;
 GLint vColor_uniform;
 glm::mat4 modelT, viewT, projectionT; //The model, view and projection transformations
@@ -35,14 +37,20 @@ int main(int, char **)
 	camPosition = glm::vec4(20.0, 40.0, 80.0, 1.0);
 	lookAtPosition = glm::vec4(0.0, 0.0, 0.0, 1.0);
 
-	unsigned int shaderProgram = createProgram("../shaders/vshader.vs", "../shaders/fshader.fs");
+	unsigned int shader_program = createProgram("../shaders/vshader.vs", "../shaders/fshader.fs");
 	//Get handle to color variable in shader
-	vColor_uniform = getUniform(shaderProgram,"vColor");
-	glUseProgram(shaderProgram);
+	vColor_uniform = getUniform(shader_program,"vColor");
+	glUseProgram(shader_program);
 
 	// Modelling transformation is setup in the display loop
-	setupViewTransformation(shaderProgram);
-	setupProjectionTransformation(shaderProgram);
+	setupViewTransformation(shader_program);
+	setupProjectionTransformation(shader_program);
+
+	unsigned int terrain_vao;
+	Terrain base_terrain(100, 100, glm::vec3(0, 0, 0), 10, 10);
+	base_terrain.setupTerrain(shader_program, terrain_vao);
+
+	createCubeObject(shader_program, terrain_vao);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -53,9 +61,9 @@ int main(int, char **)
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		glUseProgram(shaderProgram);
+		glUseProgram(shader_program);
 
-
+		
 
 		// Rendering
 		ImGui::Render();
@@ -64,6 +72,9 @@ int main(int, char **)
 		glViewport(0, 0, display_w, display_h);
 		glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// render terrain 
+		base_terrain.render(shader_program, terrain_vao);
 
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

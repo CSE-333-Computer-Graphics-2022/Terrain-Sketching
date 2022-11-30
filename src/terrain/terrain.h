@@ -1,0 +1,34 @@
+#ifndef TERRAIN_H
+#define TERRAIN_H
+#include<memory>
+#include<glm/glm.hpp>
+#include<vector>
+#include<GL/glew.h> // gluseProgram etc.. render
+
+class Terrain {
+private:
+	const int NUM_VER_X, NUM_VER_Z; 
+	const float MIN_X, MAX_X;
+	const float MIN_Z, MAX_Z;
+
+	// (x,z) -> y = 0 
+	std::vector<std::vector<float> > height_map; 
+
+
+public:
+	Terrain(const unsigned int no_ver_x, const unsigned int no_ver_y, const glm::vec3 center, float width, float depth):
+		NUM_VER_X(no_ver_x), NUM_VER_Z(no_ver_y), MIN_X((center.x - (width*0.5))), MAX_X(center.x + (width*0.5)), 
+		MIN_Z(center.z - (depth*0.5)), MAX_Z(center.z + (depth*0.5))
+	{	
+		height_map = std::vector<std::vector<float> >(no_ver_x, std::vector<float>(no_ver_y, 0.0f)); 
+	}
+
+
+	void setupTerrain(unsigned int &shader_program, unsigned int &terrain_vao);
+
+	
+	void render(unsigned int &shader_program, unsigned int &terrain_vao);
+
+};
+
+#endif
