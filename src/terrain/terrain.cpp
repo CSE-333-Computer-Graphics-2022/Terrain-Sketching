@@ -2,6 +2,7 @@
 
 void Terrain::setupTerrain(unsigned int &shader_program, unsigned int &terrain_vao) 
 {
+
 	glUseProgram(shader_program);
 
 	int vVertex_attrib = glGetAttribLocation(shader_program, "vVertex");
@@ -70,14 +71,12 @@ void Terrain::setupTerrain(unsigned int &shader_program, unsigned int &terrain_v
 
 
 void Terrain::render(unsigned int &shader_program, unsigned int &terrain_vao) {
-	int vColor_uniform = glGetUniformLocation(shader_program, "vColor");
-	if(vColor_uniform == -1){
-		fprintf(stderr, "Terrain Render: Could not bind location: vColor\n");
-		exit(0);
-	}
-	glBindVertexArray(terrain_vao); 
+	unsigned int vColor_uniform = getUniform(shader_program,"vColor");
 	glUniform4f(vColor_uniform, 0.5, 0.5, 0.5, 1.0);
+
+	unsigned int vModel_uniform = getUniform(shader_program,"vModel");
+	glUniformMatrix4fv(vModel_uniform, 1, GL_FALSE, glm::value_ptr(modelT));
+
+	glBindVertexArray(terrain_vao); 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, (NUM_VER_X-1)* (NUM_VER_Z-1) * 4);
-	// glUniform4f(vColor_uniform, 0, 0, 0.0, 1.0);
-	// glDrawArrays(GL_LINE_STRIP, 0, (NUM_VER_X-1)* (NUM_VER_Z-1) * 4);
 }

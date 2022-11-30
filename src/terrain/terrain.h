@@ -4,12 +4,15 @@
 #include<glm/glm.hpp>
 #include<vector>
 #include<GL/glew.h> // gluseProgram etc.. render
+#include <stdio.h>
+#include <utils/utils.h>
 
 class Terrain {
 private:
 	const int NUM_VER_X, NUM_VER_Z; 
 	const float MIN_X, MAX_X;
 	const float MIN_Z, MAX_Z;
+	glm::mat4 modelT;
 
 	// (x,z) -> y = 0 
 	std::vector<std::vector<float> > height_map; 
@@ -21,6 +24,7 @@ public:
 		MIN_Z(center.z - (depth*0.5)), MAX_Z(center.z + (depth*0.5))
 	{	
 		height_map = std::vector<std::vector<float> >(no_ver_x, std::vector<float>(no_ver_y, 0.0f)); 
+		modelT = glm::identity<glm::mat4>();
 	}
 
 
