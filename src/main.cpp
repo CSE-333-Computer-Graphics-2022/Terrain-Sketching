@@ -28,6 +28,10 @@ int main(int, char **)
 	unsigned int terrain_vao;
 	Terrain base_terrain(100, 100, glm::vec3(0, 0, 0), 100, 100);
 	base_terrain.setupTerrain(shader_program, terrain_vao);
+	unsigned int lightPosWorld = getUniform(shader_program,"lightPosWorld");
+	glUniform3f(lightPosWorld, 10, 20, 0);
+	unsigned int lightColor = getUniform(shader_program,"lightColor");
+	glUniform3f(lightColor, 1, 1, 1);	
 
 	while (!glfwWindowShouldClose(window))
 	{
