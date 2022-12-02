@@ -190,7 +190,7 @@ void Terrain::addNoise() {
 	std::mt19937 gen(42);
 
 	// mean, std	
-	std::normal_distribution<> d(10, 5);
+	std::normal_distribution<> d(10, 0.75);
 
 	for(int z = 0; z < NUM_VER_Z; z++) {
 		for(int x = 0; x < NUM_VER_X; x++) {
