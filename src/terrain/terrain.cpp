@@ -30,12 +30,11 @@ void Terrain::setupTerrain(unsigned int &shader_program, unsigned int &terrain_v
 	int curr_terr_index = 0;
 	bool x_phase = true;
 	for(int z = 0; z < NUM_VER_Z-1; z++) {
-	
-		for(int x = 0; x < NUM_VER_X-1; x++) {
+		for(int x = (NUM_VER_X - 2)*(z%2); x < NUM_VER_X-1 && x >= 0; x += pow(-1,(z%2))) {
 			// v1: x z
-			terrain_vertices[curr_terr_index] = (x*(MAX_X - MIN_X)/(NUM_VER_X - 1)) + MIN_X;
+			terrain_vertices[curr_terr_index] = (x*XF) + MIN_X;
 			terrain_vertices[curr_terr_index + 1] = height_map[x][z];
-			terrain_vertices[curr_terr_index + 2] = (z*(MAX_Z - MIN_Z)/(NUM_VER_Z - 1)) + MIN_Z;
+			terrain_vertices[curr_terr_index + 2] = (z*ZF) + MIN_Z;
 
 			terrain_vertices[normal_offset + curr_terr_index] = this->terrain_normals[x][z].x; 
 			terrain_vertices[normal_offset + curr_terr_index + 1] = this->terrain_normals[x][z].y; 
@@ -43,9 +42,9 @@ void Terrain::setupTerrain(unsigned int &shader_program, unsigned int &terrain_v
 			
 			curr_terr_index += 3;
 			// v2: x+1 z
-			terrain_vertices[curr_terr_index] = ((x+1)*(MAX_X - MIN_X)/(NUM_VER_X - 1)) + MIN_X;
+			terrain_vertices[curr_terr_index] = ((x+1)*XF) + MIN_X;
 			terrain_vertices[curr_terr_index + 1] = height_map[x+1][z];
-			terrain_vertices[curr_terr_index + 2] = (z*(MAX_Z - MIN_Z)/(NUM_VER_Z - 1)) + MIN_Z;
+			terrain_vertices[curr_terr_index + 2] = (z*ZF) + MIN_Z;
 
 			terrain_vertices[normal_offset + curr_terr_index] = this->terrain_normals[x + 1][z].x; 
 			terrain_vertices[normal_offset + curr_terr_index + 1] = this->terrain_normals[x + 1][z].y; 
@@ -53,9 +52,9 @@ void Terrain::setupTerrain(unsigned int &shader_program, unsigned int &terrain_v
 			
 			curr_terr_index += 3;
 			// v3: x z+1
-			terrain_vertices[curr_terr_index] = (x*(MAX_X - MIN_X)/(NUM_VER_X - 1)) + MIN_X;
+			terrain_vertices[curr_terr_index] = (x*XF) + MIN_X;
 			terrain_vertices[curr_terr_index + 1] = height_map[x][z+1];
-			terrain_vertices[curr_terr_index + 2] = ((z+1)*(MAX_Z - MIN_Z)/(NUM_VER_Z - 1)) + MIN_Z;
+			terrain_vertices[curr_terr_index + 2] = ((z+1)*ZF) + MIN_Z;
 						
 			terrain_vertices[normal_offset + curr_terr_index] = this->terrain_normals[x][z + 1].x; 
 			terrain_vertices[normal_offset + curr_terr_index + 1] = this->terrain_normals[x][z + 1].y; 
@@ -65,9 +64,9 @@ void Terrain::setupTerrain(unsigned int &shader_program, unsigned int &terrain_v
 			curr_terr_index += 3;
 
 			// v4: x+1 z+1
-			terrain_vertices[curr_terr_index] = ((x+1)*(MAX_X - MIN_X)/(NUM_VER_X - 1)) + MIN_X;
+			terrain_vertices[curr_terr_index] = ((x+1)*XF) + MIN_X;
 			terrain_vertices[curr_terr_index + 1] = height_map[x+1][z+1];
-			terrain_vertices[curr_terr_index + 2] = ((z+1)*(MAX_Z - MIN_Z)/(NUM_VER_Z - 1)) + MIN_Z;
+			terrain_vertices[curr_terr_index + 2] = ((z+1)*ZF) + MIN_Z;
 			
 			terrain_vertices[normal_offset + curr_terr_index] = this->terrain_normals[x+1][z+1].x; 
 			terrain_vertices[normal_offset + curr_terr_index + 1] = this->terrain_normals[x+1][z+1].y; 
@@ -131,22 +130,22 @@ void Terrain::updateNormals()
 	for(int z = 0; z < NUM_VER_Z; z++) {
 		for(int x = 0; x < NUM_VER_X; x++) {
 			glm::vec3 new_normal = glm::vec3(0.0f);
-			glm::vec3 xz_vec = glm::vec3((x*(MAX_X - MIN_X)/(NUM_VER_X - 1)) + MIN_X, height_map[x][z], (z*(MAX_Z - MIN_Z)/(NUM_VER_Z - 1)) + MIN_Z); 
+			glm::vec3 xz_vec = glm::vec3((x*XF) + MIN_X, height_map[x][z], (z*ZF) + MIN_Z); 
 			int num_faces = 0;
 			if(x < NUM_VER_X - 1) {
 				// x+1 z
-				glm::vec3 B = glm::vec3(((x+1)*(MAX_X - MIN_X)/(NUM_VER_X - 1)) + MIN_X, height_map[x+1][z], (z*(MAX_Z - MIN_Z)/(NUM_VER_Z - 1)) + MIN_Z) - xz_vec;
+				glm::vec3 B = glm::vec3(((x+1)*XF) + MIN_X, height_map[x+1][z], (z*ZF) + MIN_Z) - xz_vec;
 
 				if(z > 0) {
 					// x z-1
-					glm::vec3 A = glm::vec3((x*(MAX_X - MIN_X)/(NUM_VER_X - 1)) + MIN_X, height_map[x][z-1], ((z-1)*(MAX_Z - MIN_Z)/(NUM_VER_Z - 1)) + MIN_Z) - xz_vec;
+					glm::vec3 A = glm::vec3((x*XF) + MIN_X, height_map[x][z-1], ((z-1)*ZF) + MIN_Z) - xz_vec;
 					new_normal = new_normal + glm::cross(B, A);
 					// num_faces++;
 				}
 				
 				if(z < NUM_VER_Z - 1) {
 					// x z+1
-					glm::vec3 A = glm::vec3((x*(MAX_X - MIN_X)/(NUM_VER_X - 1)) + MIN_X, height_map[x][z+1], ((z+1)*(MAX_Z - MIN_Z)/(NUM_VER_Z - 1)) + MIN_Z) - xz_vec;
+					glm::vec3 A = glm::vec3((x*XF) + MIN_X, height_map[x][z+1], ((z+1)*ZF) + MIN_Z) - xz_vec;
 					new_normal = new_normal +  glm::cross(A, B);
 					// num_faces++;					
 				}
@@ -154,18 +153,18 @@ void Terrain::updateNormals()
 
 			if(x > 0) {
 				// x-1 z
-				glm::vec3 B = glm::vec3(((x-1)*(MAX_X - MIN_X)/(NUM_VER_X - 1)) + MIN_X, height_map[x-1][z], (z*(MAX_Z - MIN_Z)/(NUM_VER_Z - 1)) + MIN_Z) - xz_vec;
+				glm::vec3 B = glm::vec3(((x-1)*XF) + MIN_X, height_map[x-1][z], (z*ZF) + MIN_Z) - xz_vec;
 
 				if(z > 0) {
 					// x z-1
-					glm::vec3 A = glm::vec3((x*(MAX_X - MIN_X)/(NUM_VER_X - 1)) + MIN_X, height_map[x][z-1], ((z-1)*(MAX_Z - MIN_Z)/(NUM_VER_Z - 1)) + MIN_Z);
+					glm::vec3 A = glm::vec3((x*XF) + MIN_X, height_map[x][z-1], ((z-1)*ZF) + MIN_Z);
 					new_normal = new_normal + glm::cross(A, B);
 					// num_faces++;
 				}
 				
 				if(z < NUM_VER_Z - 1) {
 					// x z+1
-					glm::vec3 A = glm::vec3((x*(MAX_X - MIN_X)/(NUM_VER_X - 1)) + MIN_X, height_map[x][z+1], ((z+1)*(MAX_Z - MIN_Z)/(NUM_VER_Z - 1)) + MIN_Z);
+					glm::vec3 A = glm::vec3((x*XF) + MIN_X, height_map[x][z+1], ((z+1)*ZF) + MIN_Z);
 					new_normal = new_normal + glm::cross(B, A);
 					// num_faces++;					
 				}
