@@ -25,6 +25,7 @@ public:
 		MIN_Z(center.z - (depth*0.5)), MAX_Z(center.z + (depth*0.5))
 	{	
 		height_map = std::vector<std::vector<float> >(no_ver_x, std::vector<float>(no_ver_y, 0.0f)); 
+		addNoise();
 		terrain_normals = std::vector<std::vector<glm::vec3> >(no_ver_x, std::vector<glm::vec3>(no_ver_y, glm::vec3(0.0))); 
 		modelT = glm::identity<glm::mat4>();
 		updateNormals();
@@ -37,6 +38,8 @@ public:
 	void render(unsigned int &shader_program, unsigned int &terrain_vao);
 
 	void updateNormals();
+
+	void addNoise();
 
 };
 

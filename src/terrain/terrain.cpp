@@ -1,4 +1,5 @@
 #include "terrain.h"
+#include <random>
 
 void Terrain::setupTerrain(unsigned int &shader_program, unsigned int &terrain_vao) 
 {
@@ -178,4 +179,23 @@ void Terrain::updateNormals()
 			// }
 		}
 	}
+}
+
+
+void Terrain::addNoise() {
+	// std::random_device rd{};
+	// std::mt19937 gen{rd()};
+
+	// std::random_device rd{};
+	std::mt19937 gen(42);
+
+	// mean, std	
+	std::normal_distribution<> d(10, 5);
+
+	for(int z = 0; z < NUM_VER_Z; z++) {
+		for(int x = 0; x < NUM_VER_X; x++) {
+			height_map[x][z] += d(gen);
+		}
+	}
+
 }
