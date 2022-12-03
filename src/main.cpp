@@ -26,8 +26,8 @@ int main(int, char **)
 
 	Camera cam = Camera(glm::vec3(80.0f,80.0f,80.0f),glm::vec3(0.0f,0.0f,0.0f),45.0f,0.1f,1000.0f,shader_program);
 	unsigned int terrain_vao;
-	Terrain base_terrain(100, 100, glm::vec3(0, 0, 0), 100, 100);
-	base_terrain.setupTerrain(shader_program, terrain_vao);
+	Terrain base_terrain(100, 100, glm::vec3(0, 0, 0), 200, 200);
+	base_terrain.bindTerrain(shader_program, terrain_vao);
 	unsigned int lightPosWorld = getUniform(shader_program,"lightPosWorld");
 	glUniform3f(lightPosWorld, 10, 20, 0);
 	unsigned int lightColor = getUniform(shader_program,"lightColor");
