@@ -1,9 +1,9 @@
 #include "terrain.h"
 #include <random>
 
-int Terrain::coordToIndex(float x, float z)
+GLuint Terrain::coordToIndex(float x, float z)
 {
-	int idx = ((x - MIN_X) / XF) * NUM_Z + (z - MIN_Z) / ZF;
+	GLuint idx = ((x - MIN_X) / XF) * NUM_Z + (z - MIN_Z) / ZF;
 	if (idx < 0 || idx >= NUM_V)
 		return -1;
 	return idx;
@@ -13,7 +13,7 @@ void Terrain::updateNormals(float x, float z)
 {
 	int dx[8] = {0, -1, -1, -1, 0, 1, 1, 1};
 	int dz[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
-	int index = coordToIndex(x, z);
+	GLuint index = coordToIndex(x, z);
 	if (index == -1)
 		return;
 	int h = index / NUM_Z;
