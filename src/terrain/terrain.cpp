@@ -27,8 +27,8 @@ void Terrain::updateNormals(float x, float z)
 			continue;
 		if ((i == 3 || i == 5) && (h % 2 == 0))
 			continue;
-		int idx = index + NUM_Z * dx[i] + dz[i];
-		if (idx < 0 || idx >= NUM_V || abs(idx % NUM_Z - index % NUM_Z) > 1)
+		GLuint idx = index + NUM_Z * dx[i] + dz[i];
+		if (idx < 0 || idx >= NUM_V || abs((int)(idx % NUM_Z - index % NUM_Z)) > 1)
 		{
 			first = true;
 			continue;
