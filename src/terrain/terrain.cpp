@@ -73,6 +73,13 @@ void Terrain::setupTerrain()
 	for (; index < NUM_V; index++)
 		updateNormals(height_map[index * DIM], height_map[index * DIM + 2]);
 
+			for(int i = 0; i < NUM_V; i++)
+	{
+		height_map[NUM_V*DIM + i*DIM] = normal_map[i*DIM];
+		height_map[NUM_V*DIM + i*DIM+1] = normal_map[i*DIM+1];
+		height_map[NUM_V*DIM + i*DIM+2] = normal_map[i*DIM+2];
+	}
+
 	//Populating index_map
 	index = 0;
 	for (int h = 0; h < NUM_X - 1; h++)
@@ -104,6 +111,12 @@ void Terrain::addNoise()
 		height_map[i * DIM + 1] += d(gen);
 	for (int i = 0; i < NUM_V; i++)
 		updateNormals(height_map[i * DIM], height_map[i * DIM + 2]);
+	for(int i = 0; i < NUM_V; i++)
+	{
+		height_map[NUM_V*DIM + i*DIM] = normal_map[i*DIM];
+		height_map[NUM_V*DIM + i*DIM+1] = normal_map[i*DIM+1];
+		height_map[NUM_V*DIM + i*DIM+2] = normal_map[i*DIM+2];
+	}
 }
 
 void Terrain::setup(unsigned int &shader_program)
@@ -124,18 +137,15 @@ void Terrain::setup(unsigned int &shader_program)
 	glBindVertexArray(*vao);
 
 	// create VBO for the VAO
-	glGenBuffers(2, vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-	glBufferData(GL_ARRAY_BUFFER, NUM_V * DIM * sizeof(GLfloat), height_map, GL_STATIC_DRAW);
+	glGenBuffers(1, vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, *vbo);
+	glBufferData(GL_ARRAY_BUFFER, 2*NUM_V * DIM * sizeof(GLfloat), height_map, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(vVertex_attrib);
 	glVertexAttribPointer(vVertex_attrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-	glBufferData(GL_ARRAY_BUFFER, NUM_V * DIM * sizeof(GLfloat), normal_map, GL_STATIC_DRAW);
-
 	glEnableVertexAttribArray(vNormal_attrib);
-	glVertexAttribPointer(vNormal_attrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(vNormal_attrib, 3, GL_FLOAT, GL_FALSE, 0, (void *)(NUM_V*DIM*sizeof(float)));
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0); //Unbind the VAO to disable changes outside this function.

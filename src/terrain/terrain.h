@@ -30,7 +30,7 @@ public:
 	Terrain(const unsigned int num_x, const unsigned int num_y, const glm::vec3 center, float width, float depth) : NUM_X(num_x), NUM_Z(num_y), MIN_X((center.x - (width * 0.5))), MAX_X(center.x + (width * 0.5)),
 																													MIN_Z(center.z - (depth * 0.5)), MAX_Z(center.z + (depth * 0.5)), XF((MAX_X - MIN_X) / (NUM_X - 1)), ZF((MAX_Z - MIN_Z) / (NUM_Z - 1)), NUM_V(NUM_X * NUM_Z), NUM_I(2 * (NUM_X - 1) * NUM_Z)
 	{
-		height_map = new float[NUM_V * DIM];
+		height_map = new float[2*NUM_V * DIM];
 		normal_map = new float[NUM_V * DIM];
 		index_map = new int[NUM_I];
 		modelT = glm::identity<glm::mat4>();
