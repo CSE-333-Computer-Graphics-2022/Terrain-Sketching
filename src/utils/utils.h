@@ -56,6 +56,7 @@ GLuint createShader(const char* filename, GLenum type);
 unsigned int createProgram(const char *vshader_filename, const char* fshader_filename);
 char * getShaderCode(const char*);
 unsigned int getUniform(unsigned int &shader_program, const char* uniform_name);
+unsigned int getAttrib(unsigned int &shader_program, const char* uniform_name);
 
 void cleanup(GLFWwindow* );
 

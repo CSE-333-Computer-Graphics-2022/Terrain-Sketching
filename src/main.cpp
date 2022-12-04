@@ -1,5 +1,6 @@
 #include "utils/utils.h"
 #include "globals.h"
+#include "drawable.h"
 #include <camera/camera.h>
 
 #define GLM_FORCE_RADIANS
@@ -25,9 +26,10 @@ int main(int, char **)
 	glUseProgram(shader_program);
 
 	Camera cam = Camera(glm::vec3(80.0f,80.0f,80.0f),glm::vec3(0.0f,0.0f,0.0f),45.0f,0.1f,1000.0f,shader_program);
-	unsigned int terrain_vao;
-	Terrain base_terrain(100, 100, glm::vec3(0, 0, 0), 200, 200);
-	base_terrain.bindTerrain(shader_program, terrain_vao);
+
+	Terrain *base_terrain = new Terrain(100,100,glm::vec3(0,0,0),200,200);
+	base_terrain->setup(shader_program);
+	
 	unsigned int lightPosWorld = getUniform(shader_program,"lightPosWorld");
 	glUniform3f(lightPosWorld, 10, 20, 0);
 	unsigned int lightColor = getUniform(shader_program,"lightColor");
@@ -54,7 +56,7 @@ int main(int, char **)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// render terrain 
-		base_terrain.render(shader_program, terrain_vao);
+		base_terrain->draw(shader_program);
 
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

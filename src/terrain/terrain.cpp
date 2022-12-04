@@ -93,38 +93,45 @@ void Terrain::setupTerrain()
 	}
 }
 
-void Terrain::bindTerrain(unsigned int &shader_program, unsigned int &terrain_vao)
+void Terrain::addNoise()
 {
-	glUseProgram(shader_program);
-	int vVertex_attrib = glGetAttribLocation(shader_program, "vVertex");
-	if (vVertex_attrib == -1)
-	{
-		fprintf(stderr, "Terrain class setup: Could not bind location: vVertex\n");
-		exit(0);
-	}
+	std::mt19937 gen(42);
+	// mean, std
+	std::normal_distribution<> d(10, 1);
 
-	int vNormal_attrib = glGetAttribLocation(shader_program, "vNormal");
-	if (vNormal_attrib == -1)
-	{
-		fprintf(stderr, "Terrain class setup: Could not bind location: vnormal\n");
-		exit(0);
-	}
+	for (int i = 0; i < NUM_V; i++)
+
+		height_map[i * DIM + 1] += d(gen);
+	for (int i = 0; i < NUM_V; i++)
+		updateNormals(height_map[i * DIM], height_map[i * DIM + 2]);
+}
+
+void Terrain::setup(unsigned int &shader_program)
+{
+	vao = new GLuint;
+	vbo = new GLuint[2];
+
+	setupTerrain();
+	addNoise();
+
+	glUseProgram(shader_program);
+	unsigned int vVertex_attrib = getAttrib(shader_program, "vVertex");
+	unsigned int vNormal_attrib = getAttrib(shader_program, "vNormal");
 
 	// generate terrain VAO object
 	// 1: number of vertex array objects
-	glGenVertexArrays(1, &terrain_vao);
-	glBindVertexArray(terrain_vao);
+	glGenVertexArrays(1, vao);
+	glBindVertexArray(*vao);
 
 	// create VBO for the VAO
-	GLuint terrain_vbo[2];
-	glGenBuffers(2, terrain_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, terrain_vbo[0]);
+	glGenBuffers(2, vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 	glBufferData(GL_ARRAY_BUFFER, NUM_V * DIM * sizeof(GLfloat), height_map, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(vVertex_attrib);
 	glVertexAttribPointer(vVertex_attrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, terrain_vbo[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
 	glBufferData(GL_ARRAY_BUFFER, NUM_V * DIM * sizeof(GLfloat), normal_map, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(vNormal_attrib);
@@ -134,7 +141,7 @@ void Terrain::bindTerrain(unsigned int &shader_program, unsigned int &terrain_va
 	glBindVertexArray(0); //Unbind the VAO to disable changes outside this function.
 }
 
-void Terrain::render(unsigned int &shader_program, unsigned int &terrain_vao)
+void Terrain::draw(unsigned int &shader_program)
 {
 	unsigned int vColor_uniform = getUniform(shader_program, "vColor");
 	glUniform4f(vColor_uniform, 0.5, 0.5, 0.5, 1.0);
@@ -142,22 +149,9 @@ void Terrain::render(unsigned int &shader_program, unsigned int &terrain_vao)
 	unsigned int vModel_uniform = getUniform(shader_program, "vModel");
 	glUniformMatrix4fv(vModel_uniform, 1, GL_FALSE, glm::value_ptr(modelT));
 
-	glBindVertexArray(terrain_vao);
+	glBindVertexArray(*vao);
 	glDrawElements(GL_TRIANGLE_STRIP, NUM_I, GL_UNSIGNED_INT, index_map);
 
 	// glUniform4f(vColor_uniform, 1.0, 0.0, 0.0, 1.0);
 	// glDrawElements(GL_LINE_STRIP, NUM_I, GL_UNSIGNED_INT, index_map);
-}
-
-void Terrain::addNoise()
-{
-	std::mt19937 gen(42);
-	// mean, std
-	std::normal_distribution<> d(10, 1);
-
-	for (int i = 0; i < NUM_V; i++)
-	
-		height_map[i * DIM + 1] += d(gen);
-	for(int i = 0; i < NUM_V; i++)
-		updateNormals(height_map[i*DIM],height_map[i*DIM+2]);
 }

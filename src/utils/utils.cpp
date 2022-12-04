@@ -223,14 +223,25 @@ GLFWwindow* setupWindow(int width, int height)
     return window;
 }
 
-unsigned int getUniform(unsigned int &shaderProgram, const char* uniform_name)
+unsigned int getUniform(unsigned int &shader_program, const char* uniform_name)
 {
 
-	unsigned int uniform = glGetUniformLocation(shaderProgram, uniform_name);
+	int uniform = glGetUniformLocation(shader_program, uniform_name);
 	if (uniform == -1)
 	{
 		fprintf(stderr, "Could not bind location: %s\n",uniform_name);
 		exit(0);
 	}
     return uniform;
+}
+
+unsigned int getAttrib(unsigned int &shader_program, const char* attrib_name){
+    
+    int attrib = glGetAttribLocation(shader_program,attrib_name);
+    if (attrib == -1)
+    {
+		fprintf(stderr, "Could not bind location: %s\n",attrib_name);
+		exit(0);
+    }
+    return attrib;
 }
