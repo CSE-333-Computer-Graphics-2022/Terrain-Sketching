@@ -19,6 +19,8 @@ private:
 	const int NUM_V, NUM_I;
 	glm::mat4 modelT;
 
+	GLuint *ebo;
+
 	GLfloat *height_map;
 	GLuint *index_map;
 	GLfloat *normal_map;

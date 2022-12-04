@@ -110,6 +110,7 @@ void Terrain::setup(unsigned int &shader_program)
 {
 	vao = new GLuint;
 	vbo = new GLuint[2];
+	ebo = new GLuint;
 
 	setupTerrain();
 	addNoise();
@@ -137,6 +138,10 @@ void Terrain::setup(unsigned int &shader_program)
 	glEnableVertexAttribArray(vNormal_attrib);
 	glVertexAttribPointer(vNormal_attrib, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
+	glGenBuffers(1,ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, NUM_V*DIM*sizeof(GLuint), index_map, GL_STATIC_DRAW);
+
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0); //Unbind the VAO to disable changes outside this function.
 }
@@ -150,7 +155,8 @@ void Terrain::draw(unsigned int &shader_program)
 	glUniformMatrix4fv(vModel_uniform, 1, GL_FALSE, glm::value_ptr(modelT));
 
 	glBindVertexArray(*vao);
-	glDrawElements(GL_TRIANGLE_STRIP, NUM_I, GL_UNSIGNED_INT, index_map);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,*ebo);
+	glDrawElements(GL_TRIANGLE_STRIP, NUM_I, GL_UNSIGNED_INT, nullptr);
 
 	// glUniform4f(vColor_uniform, 1.0, 0.0, 0.0, 1.0);
 	// glDrawElements(GL_LINE_STRIP, NUM_I, GL_UNSIGNED_INT, index_map);
