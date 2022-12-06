@@ -1,6 +1,6 @@
-#include "camera.h"
-#include <utils/utils.h>
-#include <globals.h>
+#include "camera.hpp"
+#include <utils/utils.hpp>
+#include <globals.hpp>
 
 void Camera::setupViewTransformation(unsigned int &shader_program)
 {

@@ -1,7 +1,7 @@
-#include "utils/utils.h"
-#include "globals.h"
-#include "drawable.h"
-#include <camera/camera.h>
+#include "utils/utils.hpp"
+#include "globals.hpp"
+#include "drawable.hpp"
+#include <camera/camera.hpp>
 
 #define GLM_FORCE_RADIANS
 #define GLM_ENABLE_EXPERIMENTAL
@@ -11,7 +11,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 
-#include <terrain/terrain.h>
+#include <terrain/terrain.hpp>
 
 
 
@@ -30,10 +30,10 @@ int main(int, char **)
 	Terrain *base_terrain = new Terrain(100,100,glm::vec3(0,0,0),200,200);
 	base_terrain->setup(shader_program);
 	
-	unsigned int lightPosWorld = getUniform(shader_program,"lightPosWorld");
-	glUniform3f(lightPosWorld, 10, 20, 0);
-	unsigned int lightColor = getUniform(shader_program,"lightColor");
-	glUniform3f(lightColor, 1, 1, 1);	
+	unsigned int lightPosWorld_uniform = getUniform(shader_program,"lightPosWorld");
+	glUniform3f(lightPosWorld_uniform, 10, 20, 0);
+	unsigned int lightColor_uniform = getUniform(shader_program,"lightColor");
+	glUniform3f(lightColor_uniform, 1, 1, 1);	
 
 	while (!glfwWindowShouldClose(window))
 	{

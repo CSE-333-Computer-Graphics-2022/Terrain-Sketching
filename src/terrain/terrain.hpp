@@ -1,12 +1,12 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
-#include "drawable.h"
+#include "drawable.hpp"
 #include <glm/glm.hpp>
 #include <vector>
 #include <GL/glew.h> // gluseProgram etc.. render
 #include <stdio.h>
-#include <utils/utils.h>
+#include <utils/utils.hpp>
 
 class Terrain : Drawable
 {

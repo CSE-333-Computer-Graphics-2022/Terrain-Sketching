@@ -1,4 +1,4 @@
-#include "terrain.h"
+#include "terrain.hpp"
 #include <random>
 
 GLuint Terrain::coordToIndex(float x, float z)

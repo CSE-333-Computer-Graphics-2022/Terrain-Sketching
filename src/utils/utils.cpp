@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "utils.hpp"
 
 void cleanup(GLFWwindow* window){
     ImGui_ImplOpenGL3_Shutdown();
