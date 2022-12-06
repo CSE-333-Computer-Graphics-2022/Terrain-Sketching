@@ -2,6 +2,10 @@
 #define STROKE_H
 
 #include <drawable.hpp>
+#include <glm/glm.hpp>
+#include <utils/utils.hpp>
+
+// #include <GL/glew.h>
 
 class Stroke : Drawable
 {
@@ -11,11 +15,14 @@ protected:
 	GLfloat* expanded_vertices;
 	void setupStroke();
 
+
 private:
-	
+	glm::mat4 modelT;
 
 public:
-	Stroke() {}
+	Stroke() {
+		modelT = glm::identity<glm::mat4>();
+	}
 
 
 	//Drawable functions

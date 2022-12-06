@@ -16,7 +16,6 @@ class Sillhouette : public Stroke
 private:
 	/* data */
 	std::vector<glm::vec3 > coordinates; 
-	GLfloat* expanded_vertices;
 	int NUM_V;
 
 public:

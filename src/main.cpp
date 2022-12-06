@@ -27,7 +27,7 @@ int main(int, char **)
 	glUseProgram(shader_program);
 
 	// Camera cam = Camera(glm::vec3(80.0f,80.0f,80.0f),glm::vec3(0.0f,0.0f,0.0f),45.0f,0.1f,1000.0f,shader_program);
-	Camera cam = Camera(glm::vec3(100.0f,80.0f,0.0f),glm::vec3(0.0f,0.0f,0.0f),45.0f,0.1f,1000.0f,shader_program);
+	Camera cam = Camera(glm::vec3(-200.0f,100.0f,200.0f),glm::vec3(0.0f,0.0f,0.0f),45.0f,0.1f,1000.0f,shader_program);
 
 	Terrain *base_terrain = new Terrain(100,100,glm::vec3(0,0,0),200,200);
 	base_terrain->setup(shader_program);

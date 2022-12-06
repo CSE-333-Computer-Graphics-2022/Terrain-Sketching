@@ -27,16 +27,15 @@ Sillhouette::Sillhouette() {
 		input_fstream >> x >> y >> z;
 		if(x > 1.0)continue;
 		x = (x*200) - 100;
-		y = y*20;
+		y = y*100;
 		z = (z * 200) - 100;
 		coordinates.push_back(glm::vec3(x, y, z));
-		std::cout << x << " " <<  y << " " << z << std::endl; 
 		// this->Sillhouette(sample_coords);
 	}
+
 	input_fstream.close();
 	NUM_V = coordinates.size();
 	NUM_EXPANDED_VERTICES = NUM_V * 3;
 	expanded_vertices = new GLfloat[NUM_V * 3];
-	std::cout << NUM_V << " " << NUM_EXPANDED_VERTICES << std::endl;
 	setupSillhouette();
 }	
