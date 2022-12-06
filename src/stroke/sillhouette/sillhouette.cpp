@@ -1,5 +1,6 @@
 #include "sillhouette.hpp"
 #include <iostream>
+#include <vector>
 
 void Sillhouette::setupSillhouette() {
 	// define expanded vertices lol
@@ -19,7 +20,9 @@ void Sillhouette::setupSillhouette() {
 // 	setupSillhouette();
 // }
 
-Sillhouette::Sillhouette() {
+Sillhouette::Sillhouette(Terrain* _terrain):
+terrain(_terrain)
+ {
 	// std::vector <glm::vec3 > sample_coords;
 	std::ifstream input_fstream("/Users/vibster/Developer/CSE333-CG/Project/Terrain-Sketching/src/stroke/sillhouette/point-samples.txt");
 	float x,y,z;
@@ -38,4 +41,23 @@ Sillhouette::Sillhouette() {
 	NUM_EXPANDED_VERTICES = NUM_V * 3;
 	expanded_vertices = new GLfloat[NUM_V * 3];
 	setupSillhouette();
+	setupShadow();
 }	
+
+
+void Sillhouette::setupShadow() {
+	float y;
+	GLuint idx;
+	std::vector<glm::vec3 > shadow_coordinates;
+	float y_eps = 0.5;
+	for(int i = 0; i < NUM_V; i++) {
+		y = y_eps;
+		idx = terrain->coordToIndex(coordinates[i].x, coordinates[i].z);
+		if(idx != -1) {
+			y = terrain->getHeight(idx) + y_eps;
+		}
+		shadow_coordinates.push_back(glm::vec3(coordinates[i].x, y, coordinates[i].z));
+	}
+
+	shadow = new Shadow(shadow_coordinates);
+}

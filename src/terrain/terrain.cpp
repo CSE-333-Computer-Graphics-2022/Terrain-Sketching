@@ -113,7 +113,7 @@ void Terrain::setup(unsigned int &shader_program)
 	ebo = new GLuint;
 
 	setupTerrain();
-	addNoise();
+	// addNoise();
 
 	glUseProgram(shader_program);
 	unsigned int vVertex_attrib = getAttrib(shader_program, "vVertex");
@@ -158,6 +158,6 @@ void Terrain::draw(unsigned int &shader_program)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,*ebo);
 	glDrawElements(GL_TRIANGLE_STRIP, NUM_I, GL_UNSIGNED_INT, nullptr);
 
-	glUniform4f(vColor_uniform, 1.0, 0.0, 0.0, 1.0);
-	glDrawElements(GL_LINE_STRIP, NUM_I, GL_UNSIGNED_INT, nullptr);
+	// glUniform4f(vColor_uniform, 1.0, 0.0, 0.0, 1.0);
+	// glDrawElements(GL_LINE_STRIP, NUM_I, GL_UNSIGNED_INT, nullptr);
 }

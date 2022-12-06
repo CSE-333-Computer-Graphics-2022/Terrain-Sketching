@@ -18,6 +18,7 @@ set(SOURCES
 	"src/camera/camera.cpp"
 	"src/stroke/stroke.cpp"
 	"src/stroke/sillhouette/sillhouette.cpp"
+	"src/stroke/shadow/shadow.cpp"
 	"depends/imgui/imgui_impl_glfw.cpp"
 	"depends/imgui/imgui_impl_opengl3.cpp"
 	"depends/imgui/imgui.cpp"

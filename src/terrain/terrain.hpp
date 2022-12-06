@@ -24,7 +24,6 @@ private:
 	GLfloat *height_map;
 	GLuint *index_map;
 	GLfloat *normal_map;
-	GLuint coordToIndex(float x, float z);
 	void updateNormals(float x, float z);
 	void setupTerrain();
 
@@ -39,6 +38,11 @@ public:
 	}
 
 	void addNoise();
+	GLfloat getHeight(GLuint idx) {
+		return height_map[(idx*DIM) + 1];
+	}
+	GLuint coordToIndex(float x, float z);
+
 
 	//Drawable functions
 	void setup(unsigned int &shader_program);
