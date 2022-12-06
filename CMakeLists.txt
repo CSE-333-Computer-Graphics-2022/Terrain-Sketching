@@ -16,6 +16,8 @@ set(SOURCES
 	"src/utils/utils.cpp"
 	"src/terrain/terrain.cpp"
 	"src/camera/camera.cpp"
+	"src/stroke/stroke.cpp"
+	"src/stroke/sillhouette/sillhouette.cpp"
 	"depends/imgui/imgui_impl_glfw.cpp"
 	"depends/imgui/imgui_impl_opengl3.cpp"
 	"depends/imgui/imgui.cpp"
