@@ -3,6 +3,7 @@
 
 #include "../stroke.hpp"
 #include "../shadow/shadow.hpp"
+#include "../boundary/boundary.hpp"
 #include "../../terrain/terrain.hpp"
 #include <vector>
 #include <GL/glew.h>
@@ -21,6 +22,7 @@ private:
 	int NUM_V;
 	Terrain* terrain;
 	Shadow* shadow;
+	Boundary* boundary;
 
 public:
 	Sillhouette(std::vector<glm::vec3 > _coordinates, Terrain* _terrain):
@@ -31,14 +33,19 @@ public:
 		expanded_vertices = new GLfloat[NUM_V * 3];
 		setupSillhouette();
 		setupShadow();
+		setupBoundary();
 	}
 	void setupShadow();
+	void setupBoundary();
 	// temp 
 	Sillhouette(Terrain* _terrain);
 	~Sillhouette();
 	void setupSillhouette();
 	Shadow* getShadow() {
 		return shadow;
+	}
+	Boundary* getBoundary() {
+		return boundary;
 	}
 };
 

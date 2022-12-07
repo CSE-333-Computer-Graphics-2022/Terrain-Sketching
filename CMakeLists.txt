@@ -19,6 +19,7 @@ set(SOURCES
 	"src/stroke/stroke.cpp"
 	"src/stroke/sillhouette/sillhouette.cpp"
 	"src/stroke/shadow/shadow.cpp"
+	"src/stroke/boundary/boundary.cpp"
 	"depends/imgui/imgui_impl_glfw.cpp"
 	"depends/imgui/imgui_impl_opengl3.cpp"
 	"depends/imgui/imgui.cpp"

@@ -1,0 +1,3 @@
+/Users/vibster/Developer/CSE333-CG/Project/Terrain-Sketching/CMakeFiles/Terrain-Sketching.dir
+/Users/vibster/Developer/CSE333-CG/Project/Terrain-Sketching/CMakeFiles/edit_cache.dir
+/Users/vibster/Developer/CSE333-CG/Project/Terrain-Sketching/CMakeFiles/rebuild_cache.dir

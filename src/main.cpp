@@ -13,6 +13,7 @@
 
 #include <terrain/terrain.hpp>
 #include <stroke/sillhouette/sillhouette.hpp>
+#include <stroke/shadow/shadow.hpp>
 
 
 
@@ -36,7 +37,8 @@ int main(int, char **)
 	test_sillhouette->setup(shader_program);
 	Shadow* test_shadow = test_sillhouette->getShadow();
 	test_shadow->setup(shader_program);
-	
+	Boundary* test_boundary = test_sillhouette->getBoundary();
+	printf("BOUND\n");
 	unsigned int lightPosWorld_uniform = getUniform(shader_program,"lightPosWorld");
 	glUniform3f(lightPosWorld_uniform, 10, 20, 0);
 	unsigned int lightColor_uniform = getUniform(shader_program,"lightColor");
@@ -67,6 +69,9 @@ int main(int, char **)
 		// render stroke
 		test_sillhouette->draw(shader_program);
 		test_shadow->draw(shader_program);
+		printf("before bound draw\n");
+		test_boundary->draw(shader_program);
+		printf("after bound draw\n");
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		glfwSwapBuffers(window);
