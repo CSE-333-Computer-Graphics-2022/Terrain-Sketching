@@ -27,10 +27,10 @@ int main(int, char **)
 	//Get handle to color variable in shader
 	glUseProgram(shader_program);
 
-	Camera cam = Camera(glm::vec3(-80.0f,80.0f,80.0f),glm::vec3(0.0f,0.0f,0.0f),45.0f,0.1f,1000.0f,shader_program);
+	Camera cam = Camera(glm::vec3(-120.0f,120.0f,120.0f),glm::vec3(0.0f,0.0f,0.0f),45.0f,0.1f,1000.0f,shader_program);
 	// Camera cam = Camera(glm::vec3(-20.0f,10.0f,20.0f),glm::vec3(0.0f,0.0f,0.0f),45.0f,0.1f,1000.0f,shader_program);
 
-	Terrain *base_terrain = new Terrain(100,100,glm::vec3(0,0,0),200,200);
+	Terrain *base_terrain = new Terrain(100,100,glm::vec3(0,0,0),500,500);
 	base_terrain->setup(shader_program);
 
 	Sillhouette *test_sillhouette = new Sillhouette(base_terrain);
@@ -38,6 +38,7 @@ int main(int, char **)
 	Shadow* test_shadow = test_sillhouette->getShadow();
 	test_shadow->setup(shader_program);
 	Boundary* test_boundary = test_sillhouette->getBoundary();
+	test_boundary->setup(shader_program);
 	printf("BOUND\n");
 	unsigned int lightPosWorld_uniform = getUniform(shader_program,"lightPosWorld");
 	glUniform3f(lightPosWorld_uniform, 10, 20, 0);
@@ -69,9 +70,7 @@ int main(int, char **)
 		// render stroke
 		test_sillhouette->draw(shader_program);
 		test_shadow->draw(shader_program);
-		printf("before bound draw\n");
 		test_boundary->draw(shader_program);
-		printf("after bound draw\n");
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		glfwSwapBuffers(window);
