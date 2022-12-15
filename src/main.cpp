@@ -23,23 +23,18 @@ int main(int, char **)
 	GLFWwindow *window = setupWindow(SCREEN_W, SCREEN_H);
 	ImGuiIO &io = ImGui::GetIO(); // Create IO
 
+	float lastTime = 0;
+	float deltaTime = 0;
+
 	unsigned int shader_program = createProgram("../shaders/vshader.vs", "../shaders/fshader.fs");
 	//Get handle to color variable in shader
 	glUseProgram(shader_program);
 
-	Camera cam = Camera(glm::vec3(-120.0f,120.0f,120.0f),glm::vec3(0.0f,0.0f,0.0f),45.0f,0.1f,1000.0f,shader_program);
-	// Camera cam = Camera(glm::vec3(-20.0f,10.0f,20.0f),glm::vec3(0.0f,0.0f,0.0f),45.0f,0.1f,1000.0f,shader_program);
+	Camera cam = Camera(glm::vec3(-120.0f,120.0f,120.0f),glm::vec3(0.0f,0.0f,-1.0f),glm::vec3(0.0f,1.0f,0.0f),45.0f,0.1f,1000.0f,shader_program, window);
 
 	Terrain *base_terrain = new Terrain(100,100,glm::vec3(0,0,0),500,500);
 	base_terrain->setup(shader_program);
 
-	Sillhouette *test_sillhouette = new Sillhouette(base_terrain);
-	test_sillhouette->setup(shader_program);
-	Shadow* test_shadow = test_sillhouette->getShadow();
-	test_shadow->setup(shader_program);
-	Boundary* test_boundary = test_sillhouette->getBoundary();
-	test_boundary->setup(shader_program);
-	printf("BOUND\n");
 	unsigned int lightPosWorld_uniform = getUniform(shader_program,"lightPosWorld");
 	glUniform3f(lightPosWorld_uniform, 10, 20, 0);
 	unsigned int lightColor_uniform = getUniform(shader_program,"lightColor");
@@ -47,7 +42,6 @@ int main(int, char **)
 
 	while (!glfwWindowShouldClose(window))
 	{
-		glfwPollEvents();
 
 		// Start the Dear ImGui frame
 		ImGui_ImplOpenGL3_NewFrame();
@@ -55,7 +49,12 @@ int main(int, char **)
 		ImGui::NewFrame();
 
 		glUseProgram(shader_program);
-		
+
+		float currTime = static_cast<float>(glfwGetTime());
+		deltaTime = currTime - lastTime;
+		lastTime = currTime;
+
+		cam.process_keys(window,deltaTime);		
 
 		// Rendering
 		ImGui::Render();
@@ -67,13 +66,10 @@ int main(int, char **)
 
 		// render terrain 
 		base_terrain->draw(shader_program);
-		// render stroke
-		test_sillhouette->draw(shader_program);
-		test_shadow->draw(shader_program);
-		test_boundary->draw(shader_program);
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		glfwSwapBuffers(window);
+		glfwPollEvents();
 	}
 
 	// Cleanup
