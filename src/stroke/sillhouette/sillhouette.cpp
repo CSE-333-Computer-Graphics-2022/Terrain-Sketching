@@ -34,7 +34,6 @@ terrain(_terrain)
 		y = y*100;
 		z = (z * 200) - 100;
 		coordinates.push_back(glm::vec3(x, y, z));
-		printf("%f, %f, %f\n", x, y, z);
 		// this->Sillhouette(sample_coords);
 	}
 
@@ -216,6 +215,5 @@ void Sillhouette::setupBoundary() {
 
 
 	boundary = new Boundary(boundary_coordinates);
-	printf("ASDADS\n");
 
 }

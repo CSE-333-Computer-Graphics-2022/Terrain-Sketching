@@ -2,6 +2,7 @@
 #include<utils/utils.hpp>
 
 void Stroke::draw(unsigned int &shader_program) {
+	glEnable(GL_LINE_SMOOTH);
 	unsigned int vColor_uniform = getUniform(shader_program, "vColor");
 	glUniform4f(vColor_uniform, 1, 0, 0, 1.0);
 
@@ -9,7 +10,7 @@ void Stroke::draw(unsigned int &shader_program) {
 	glUniformMatrix4fv(vModel_uniform, 1, GL_FALSE, glm::value_ptr(modelT));
 
 	glBindVertexArray(*vao);
-	glDrawArrays(GL_LINE_STRIP, 0, NUM_EXPANDED_VERTICES/3);
+	glDrawArrays(GL_LINE_STRIP_ADJACENCY, 0, NUM_EXPANDED_VERTICES/3);
 	glDisable(GL_LINE_SMOOTH);
 }
 

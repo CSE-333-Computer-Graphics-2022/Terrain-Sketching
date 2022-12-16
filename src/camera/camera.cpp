@@ -1,17 +1,21 @@
 #include "camera.hpp"
 
-
-void Camera::setupViewTransformation()
+void Camera::setCamPos(unsigned int &shaderProgram)
 {
+    glUseProgram(shaderProgram);
     unsigned int eye_pos_uniform = getUniform(shaderProgram, "eye_pos");
     glUniform3f(eye_pos_uniform, camPos.x, camPos.y, camPos.z);
+}
+
+void Camera::setViewTransformation(unsigned int &shaderProgram)
+{
     view_t = glm::lookAt(glm::vec3(camPos), glm::vec3(camPos + camFront), camUp);
     glUseProgram(shaderProgram);
     unsigned int vView_uniform = getUniform(shaderProgram, "vView");
     glUniformMatrix4fv(vView_uniform, 1, GL_FALSE, glm::value_ptr(view_t));
 }
 
-void Camera::setupProjectionTransformation()
+void Camera::setProjectionTransformation(unsigned int &shaderProgram)
 {
 
     projection_t = glm::perspective(fov, (GLfloat)SCREEN_W / (GLfloat)SCREEN_H, near, far);
@@ -22,7 +26,6 @@ void Camera::setupProjectionTransformation()
 
 void Camera::process_keys(GLFWwindow *window, float deltaTime)
 {
-
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         deltaTime = 10 * deltaTime;
     bool mod = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS;
@@ -32,7 +35,6 @@ void Camera::process_keys(GLFWwindow *window, float deltaTime)
             camPos += deltaTime * SPEED * glm::vec3(0.0f, 1.0f, 0.0f);
         else
             camPos += deltaTime * SPEED * camFront;
-        setupViewTransformation();
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
@@ -40,17 +42,14 @@ void Camera::process_keys(GLFWwindow *window, float deltaTime)
             camPos -= deltaTime * SPEED * glm::vec3(0.0f, 1.0f, 0.0f);
         else
             camPos -= deltaTime * SPEED * camFront;
-        setupViewTransformation();
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
         camPos -= deltaTime * SPEED * glm::normalize(glm::cross(camFront, camUp));
-        setupViewTransformation();
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
         camPos += deltaTime * SPEED * glm::normalize(glm::cross(camFront, camUp));
-        setupViewTransformation();
     }
 }
 
@@ -78,7 +77,6 @@ void Camera::mouse_motion(double xpos, double ypos)
         direction.y = sin(glm::radians(pitch));
         direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
         camFront = glm::normalize(direction);
-        setupViewTransformation();
     }
 }
 
@@ -88,7 +86,8 @@ void Camera::process_input(GLFWwindow *window, float deltaTime)
     {
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
-        if(!first) mouse_motion(xpos,ypos);
+        if (!first)
+            mouse_motion(xpos, ypos);
         else
         {
             prevX = xpos;

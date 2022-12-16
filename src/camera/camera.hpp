@@ -12,7 +12,6 @@ private:
     glm::mat4 view_t, projection_t;
     const float SENSITIVITY = 0.1f;
     const float SPEED = 50.0f;
-    unsigned int shaderProgram;
     float fov, near, far;
     float pitch,yaw;
     bool dragging, first;
@@ -23,10 +22,8 @@ private:
 public:
     void process_input(GLFWwindow *window, float deltaTime);
     Camera(glm::vec3 pos, glm::vec3 look_at, glm::vec3 up, float _fov, float near_clip, 
-    float far_clip, unsigned int &shader_program, GLFWwindow *window) : camPos(pos), camFront(glm::normalize(look_at - pos)), camUp(up), fov(_fov), near(near_clip), far(far_clip), shaderProgram(shader_program)
+    float far_clip, GLFWwindow *window) : camPos(pos), camFront(glm::normalize(look_at - pos)), camUp(up), fov(_fov), near(near_clip), far(far_clip)
     {
-        setupViewTransformation();
-        setupProjectionTransformation();
         dragging = false;
         first = true;
         prevX = (GLfloat) SCREEN_W/2;
@@ -35,7 +32,8 @@ public:
         yaw = -40.6623f;
     }
 
-    void setupViewTransformation();
-    void setupProjectionTransformation();
+    void setViewTransformation(unsigned int &shaderProgram);
+    void setProjectionTransformation(unsigned int &shaderProgram);
+    void setCamPos(unsigned int &shaderProgram);
 };
 #endif
