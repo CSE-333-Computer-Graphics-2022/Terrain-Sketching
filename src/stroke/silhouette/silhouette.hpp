@@ -1,5 +1,5 @@
-#ifndef SILLHOUETTE_H
-#define SILLHOUETTE_H
+#ifndef SILHOUETTE_H
+#define SILHOUETTE_H
 
 #include "../stroke.hpp"
 #include "../shadow/shadow.hpp"
@@ -14,7 +14,7 @@
 #include <string>
 
 
-class Sillhouette : public Stroke
+class Silhouette : public Stroke
 {
 private:
 	/* data */
@@ -25,22 +25,22 @@ private:
 	Boundary* boundary;
 
 public:
-	Sillhouette(std::vector<glm::vec3 > _coordinates, Terrain* _terrain):
+	Silhouette(std::vector<glm::vec3 > _coordinates, Terrain* _terrain):
 	coordinates(_coordinates), terrain(_terrain)
 	{	
 		NUM_V = coordinates.size();
 		NUM_EXPANDED_VERTICES = NUM_V * 3;
 		expanded_vertices = new GLfloat[NUM_V * 3];
-		setupSillhouette();
+		setupSilhouette();
 		setupShadow();
 		setupBoundary();
 	}
 	void setupShadow();
 	void setupBoundary();
 	// temp 
-	Sillhouette(Terrain* _terrain);
-	~Sillhouette();
-	void setupSillhouette();
+	Silhouette(Terrain* _terrain);
+	~Silhouette();
+	void setupSilhouette();
 	Shadow* getShadow() {
 		return shadow;
 	}

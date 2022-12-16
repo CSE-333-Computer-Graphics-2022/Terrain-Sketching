@@ -1,26 +1,26 @@
 #include "camera.hpp"
 
-void Camera::setCamPos(unsigned int &shaderProgram)
+void Camera::setCamPos(unsigned int &shader_program)
 {
-    glUseProgram(shaderProgram);
-    unsigned int eye_pos_uniform = getUniform(shaderProgram, "eye_pos");
-    glUniform3f(eye_pos_uniform, camPos.x, camPos.y, camPos.z);
+    glUseProgram(shader_program);
+    unsigned int eye_pos_uniform = getUniform(shader_program, "eye_pos");
+    glUniform3f(eye_pos_uniform, cam_pos.x, cam_pos.y, cam_pos.z);
 }
 
-void Camera::setViewTransformation(unsigned int &shaderProgram)
+void Camera::setViewTransformation(unsigned int &shader_program)
 {
-    view_t = glm::lookAt(glm::vec3(camPos), glm::vec3(camPos + camFront), camUp);
-    glUseProgram(shaderProgram);
-    unsigned int vView_uniform = getUniform(shaderProgram, "vView");
+    view_t = glm::lookAt(glm::vec3(cam_pos), glm::vec3(cam_pos + cam_front), cam_up);
+    glUseProgram(shader_program);
+    unsigned int vView_uniform = getUniform(shader_program, "vView");
     glUniformMatrix4fv(vView_uniform, 1, GL_FALSE, glm::value_ptr(view_t));
 }
 
-void Camera::setProjectionTransformation(unsigned int &shaderProgram)
+void Camera::setProjectionTransformation(unsigned int &shader_program)
 {
 
     projection_t = glm::perspective(fov, (GLfloat)SCREEN_W / (GLfloat)SCREEN_H, near, far);
-    glUseProgram(shaderProgram);
-    unsigned int vProjection_uniform = getUniform(shaderProgram, "vProjection");
+    glUseProgram(shader_program);
+    unsigned int vProjection_uniform = getUniform(shader_program, "vProjection");
     glUniformMatrix4fv(vProjection_uniform, 1, GL_FALSE, glm::value_ptr(projection_t));
 }
 
@@ -32,24 +32,24 @@ void Camera::process_keys(GLFWwindow *window, float deltaTime)
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
         if (mod)
-            camPos += deltaTime * SPEED * glm::vec3(0.0f, 1.0f, 0.0f);
+            cam_pos += deltaTime * SPEED * glm::vec3(0.0f, 1.0f, 0.0f);
         else
-            camPos += deltaTime * SPEED * camFront;
+            cam_pos += deltaTime * SPEED * cam_front;
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
         if (mod)
-            camPos -= deltaTime * SPEED * glm::vec3(0.0f, 1.0f, 0.0f);
+            cam_pos -= deltaTime * SPEED * glm::vec3(0.0f, 1.0f, 0.0f);
         else
-            camPos -= deltaTime * SPEED * camFront;
+            cam_pos -= deltaTime * SPEED * cam_front;
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-        camPos -= deltaTime * SPEED * glm::normalize(glm::cross(camFront, camUp));
+        cam_pos -= deltaTime * SPEED * glm::normalize(glm::cross(cam_front, cam_up));
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-        camPos += deltaTime * SPEED * glm::normalize(glm::cross(camFront, camUp));
+        cam_pos += deltaTime * SPEED * glm::normalize(glm::cross(cam_front, cam_up));
     }
 }
 
@@ -58,10 +58,10 @@ void Camera::mouse_motion(double xpos, double ypos)
     if (dragging)
     {
         //Rotating
-        float xoffset = xpos - prevX;
-        float yoffset = prevY - ypos;
-        prevX = xpos;
-        prevY = ypos;
+        float xoffset = xpos - prev_x;
+        float yoffset = prev_y - ypos;
+        prev_x = xpos;
+        prev_y = ypos;
 
         xoffset *= SENSITIVITY;
         yoffset *= SENSITIVITY;
@@ -76,7 +76,7 @@ void Camera::mouse_motion(double xpos, double ypos)
         direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
         direction.y = sin(glm::radians(pitch));
         direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-        camFront = glm::normalize(direction);
+        cam_front = glm::normalize(direction);
     }
 }
 
@@ -86,17 +86,16 @@ void Camera::process_input(GLFWwindow *window, float deltaTime)
     {
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
-        if (!first)
+        if (dragging)
             mouse_motion(xpos, ypos);
         else
         {
-            prevX = xpos;
-            prevY = ypos;
-            first = false;
+            prev_x = xpos;
+            prev_y = ypos;
+            dragging = true;
         }
-        dragging = true;
     }
     else
-        first = true;
+        dragging = false;
     process_keys(window, deltaTime);
 }
