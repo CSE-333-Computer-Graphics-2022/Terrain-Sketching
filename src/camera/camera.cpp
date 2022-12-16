@@ -1,12 +1,5 @@
 #include "camera.hpp"
-#include <utils/utils.hpp>
-#include <globals.hpp>
 
-bool Camera::dragging = false, Camera::firstMouse = false;
-double Camera::prevX = (GLfloat)SCREEN_W / 2;
-double Camera::prevY = (GLfloat)SCREEN_H / 2;
-float Camera::pitch = -35.1519f, Camera::yaw = -40.6623f;
-Camera *Camera::instance;
 
 void Camera::setupViewTransformation()
 {
@@ -29,66 +22,40 @@ void Camera::setupProjectionTransformation()
 
 void Camera::process_keys(GLFWwindow *window, float deltaTime)
 {
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        deltaTime = 10 * deltaTime;
+    bool mod = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
     {
-        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            instance->camPos += 10 * deltaTime * SPEED * instance->camFront;
+        if (mod)
+            camPos += deltaTime * SPEED * glm::vec3(0.0f, 1.0f, 0.0f);
         else
-            instance->camPos += deltaTime * SPEED * instance->camFront;
-        instance->setupViewTransformation();
+            camPos += deltaTime * SPEED * camFront;
+        setupViewTransformation();
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
     {
-        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            instance->camPos -= 10 * deltaTime * SPEED * instance->camFront;
+        if (mod)
+            camPos -= deltaTime * SPEED * glm::vec3(0.0f, 1.0f, 0.0f);
         else
-            instance->camPos -= deltaTime * SPEED * instance->camFront;
-        instance->setupViewTransformation();
+            camPos -= deltaTime * SPEED * camFront;
+        setupViewTransformation();
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
     {
-        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            instance->camPos -= 10 * deltaTime * SPEED * glm::normalize(glm::cross(instance->camFront, instance->camUp));
-        else
-            instance->camPos -= deltaTime * SPEED * glm::normalize(glm::cross(instance->camFront, instance->camUp));
-        instance->setupViewTransformation();
+        camPos -= deltaTime * SPEED * glm::normalize(glm::cross(camFront, camUp));
+        setupViewTransformation();
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-            instance->camPos += 10 * deltaTime * SPEED * glm::normalize(glm::cross(instance->camFront, instance->camUp));
-        else
-            instance->camPos += deltaTime * SPEED * glm::normalize(glm::cross(instance->camFront, instance->camUp));
-        instance->setupViewTransformation();
+        camPos += deltaTime * SPEED * glm::normalize(glm::cross(camFront, camUp));
+        setupViewTransformation();
     }
 }
 
-void Camera::mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
+void Camera::mouse_motion(double xpos, double ypos)
 {
-    if (button == GLFW_MOUSE_BUTTON_LEFT)
-    {
-        if (action == GLFW_RELEASE)
-            dragging = false;
-        else if (action == GLFW_PRESS)
-        {
-
-            double xpos, ypos;
-            glfwGetCursorPos(window, &xpos, &ypos);
-            prevX = xpos;
-            prevY = ypos;
-            dragging = true;
-        }
-    }
-}
-
-void Camera::mouse_motion_callback(GLFWwindow *window, double xpos, double ypos)
-{
-    if (firstMouse) // initially set to true
-    {
-        prevX = xpos;
-        prevY = ypos;
-        firstMouse = false;
-    }
     if (dragging)
     {
         //Rotating
@@ -110,7 +77,27 @@ void Camera::mouse_motion_callback(GLFWwindow *window, double xpos, double ypos)
         direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
         direction.y = sin(glm::radians(pitch));
         direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-        instance->camFront = glm::normalize(direction);
-        instance->setupViewTransformation();
+        camFront = glm::normalize(direction);
+        setupViewTransformation();
     }
+}
+
+void Camera::process_input(GLFWwindow *window, float deltaTime)
+{
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+    {
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+        if(!first) mouse_motion(xpos,ypos);
+        else
+        {
+            prevX = xpos;
+            prevY = ypos;
+            first = false;
+        }
+        dragging = true;
+    }
+    else
+        first = true;
+    process_keys(window, deltaTime);
 }

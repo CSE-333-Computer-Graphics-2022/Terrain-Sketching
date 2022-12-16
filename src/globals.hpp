@@ -8,4 +8,10 @@ const int SCREEN_H = 768;
 
 const ImVec4 WHITE = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 
+enum MODES
+{
+    FLY,
+    SILHOUETTE,
+};
+
 #endif

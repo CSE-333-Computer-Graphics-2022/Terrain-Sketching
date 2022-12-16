@@ -14,6 +14,7 @@ find_package(GLEW REQUIRED)
 set(SOURCES
 	"src/main.cpp"
 	"src/utils/utils.cpp"
+	"src/ui/ui.cpp"
 	"src/terrain/terrain.cpp"
 	"src/camera/camera.cpp"
 	"src/stroke/stroke.cpp"

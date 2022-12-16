@@ -24,7 +24,8 @@ Sillhouette::Sillhouette(Terrain* _terrain):
 terrain(_terrain)
  {
 	// std::vector <glm::vec3 > sample_coords;
-	std::ifstream input_fstream("/Users/vibster/Developer/CSE333-CG/Project/Terrain-Sketching/src/stroke/sillhouette/point-samples.txt");
+	std::ifstream input_fstream("/run/media/lot1aus/hdd_2/CG Class/project/Terrain-Sketching/src/stroke/sillhouette/point-samples.txt");
+	// std::ifstream input_fstream("/Users/vibster/Developer/CSE333-CG/Project/Terrain-Sketching/src/stroke/sillhouette/point-samples.txt");
 	float x,y,z;
 	while(!input_fstream.eof()) {
 		input_fstream >> x >> y >> z;

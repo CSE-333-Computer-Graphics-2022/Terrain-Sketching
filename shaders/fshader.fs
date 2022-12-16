@@ -3,6 +3,7 @@
 uniform vec3 lightPosWorld; 
 uniform vec3 lightColor;
 uniform vec3 eye_pos; // camera pos 
+uniform float alpha;
 
 in vec4 fColor;
 out vec4 outColor;
@@ -31,5 +32,5 @@ void main(void) {
         vec3 fColorResult = (Ia + Id + Is); //Interpolate color
 
 
-        outColor = fColor * vec4(fColorResult, 1.0);
+        outColor = fColor * vec4(fColorResult, alpha);
 }
