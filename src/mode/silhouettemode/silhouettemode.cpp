@@ -8,7 +8,9 @@ void SilhouetteMode::process_input(GLFWwindow *window, float delta_time)
         double x_pos, y_pos;
         glfwGetCursorPos(window, &x_pos, &y_pos);
         //Get x,y,z add it to the stroke to render
-        glm::vec3 pos = getWorldPos(x_pos, y_pos);
+        int display_w, display_h;
+		glfwGetFramebufferSize(window, &display_w, &display_h);
+        glm::vec3 pos = getWorldPos(x_pos, y_pos,display_w,display_h);
         stroke->addSilhouetteVertex(pos);
         drawing = true;
     }
@@ -18,11 +20,11 @@ void SilhouetteMode::process_input(GLFWwindow *window, float delta_time)
         drawing = false;
     }
 }
-glm::vec3 SilhouetteMode::getWorldPos(double x, double y)
+glm::vec3 SilhouetteMode::getWorldPos(double x, double y, int display_w, int display_h)
 {
     glm::mat4 invVP = glm::inverse(cam->getProjection()*cam->getView());
-    glm::vec4 near = glm::vec4((x/(SCREEN_W/2.0) - 1.0),-1*(y/(SCREEN_H/2.0) - 1.0), -1, 1.0);
-    glm::vec4 far = glm::vec4((x/(SCREEN_W/2.0) - 1.0),-1*(y/(SCREEN_H/2.0) - 1.0), 1, 1.0);
+    glm::vec4 near = glm::vec4((x/(display_w/2.0) - 1.0),-1*(y/(display_h/2.0) - 1.0), -1, 1.0);
+    glm::vec4 far = glm::vec4((x/(display_w/2.0) - 1.0),-1*(y/(display_h/2.0) - 1.0), 1, 1.0);
     glm::vec4 nearR = invVP*near;
     glm::vec4 farR = invVP*far;
     nearR /= nearR.w;

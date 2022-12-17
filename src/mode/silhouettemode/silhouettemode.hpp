@@ -13,7 +13,7 @@ private:
     Silhouette *stroke;
     std::vector<GLfloat> coordinates;
     void addSilhouette();
-    glm::vec3 getWorldPos(double x, double y);
+    glm::vec3 getWorldPos(double x, double y, int display_w, int display_h);
 
 public:
     SilhouetteMode(Camera *_cam)
