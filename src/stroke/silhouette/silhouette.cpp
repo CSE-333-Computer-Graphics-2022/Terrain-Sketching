@@ -11,15 +11,6 @@ void Silhouette::setupSilhouette() {
 	}
 }
 
-// Silhouette::Silhouette(std::vector<glm::vec3 > _coordinates):
-// coordinates(_coordinates)
-// {	
-// 	NUM_V = coordinates.size();
-// 	NUM_EXPANDED_VERTICES = NUM_V * 3;
-// 	expanded_vertices = new GLfloat[NUM_V * 3];
-// 	setupSilhouette();
-// }
-
 Silhouette::Silhouette(Terrain* _terrain):
 terrain(_terrain)
  {

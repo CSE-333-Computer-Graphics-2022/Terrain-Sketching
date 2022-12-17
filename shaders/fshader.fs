@@ -30,7 +30,5 @@ void main(void) {
 	vec3 Is = ks * (max(pow(dot(fragNorm, h), spec_exp), 0) * lightColor);
 	
         vec3 fColorResult = (Ia + Id + Is); //Interpolate color
-
-
-        outColor = fColor * vec4(fColorResult, alpha);
+        outColor = fColor * vec4(fColorResult, 1.0);
 }

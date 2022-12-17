@@ -28,10 +28,9 @@ int main(int, char **)
 	unsigned int shader_program = createProgram("../shaders/vshader.vs", "../shaders/fshader.fs");
 	unsigned int shader_program_2 = createProgram("../shaders/polyline.vert", "../shaders/polyline.geom", "../shaders/polyline.frag");
 
-	
 	SilhouetteMode *smode = new SilhouetteMode();
 	Camera *cam = new Camera(glm::vec3(-500.0f, 300.0f, 350.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
-						45.0f, 0.1f, 10000.0f, window);
+							 45.0f, 0.1f, 10000.0f, window);
 
 	Terrain *base_terrain = new Terrain(100, 100, glm::vec3(0, 0, 0), 500, 500);
 
@@ -56,6 +55,9 @@ int main(int, char **)
 	cam->setProjectionTransformation(shader_program_2);
 	cam->setViewTransformation(shader_program_2);
 
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	// glEnable(GL_CULL_FACE);
 	while (!glfwWindowShouldClose(window))
 	{
 		// Start the Dear ImGui frame
@@ -76,7 +78,7 @@ int main(int, char **)
 			switch (ui.get_mode())
 			{
 			case SILHOUETTE:
-				smode->process_input(window,delta_time);
+				smode->process_input(window, delta_time);
 				break;
 
 			default:
@@ -96,7 +98,6 @@ int main(int, char **)
 		glClearColor(WHITE.x, WHITE.y, WHITE.z, WHITE.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glEnable(GL_DEPTH_TEST);
 		// render terrain
 		glUseProgram(shader_program);
 		base_terrain->draw(shader_program);
