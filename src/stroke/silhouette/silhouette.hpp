@@ -5,47 +5,34 @@
 #include "../shadow/shadow.hpp"
 #include "../boundary/boundary.hpp"
 #include "../../terrain/terrain.hpp"
-#include <vector>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 
-#include <iostream>
-#include <fstream>
-#include <string>
 
-
-class Silhouette : public Stroke
+class Silhouette
 {
 private:
-	/* data */
-	std::vector<glm::vec3 > coordinates; 
-	int NUM_V;
-	Terrain* terrain;
-	Shadow* shadow;
-	Boundary* boundary;
-
+	Stroke *silhouette_stroke, *shadow_curve, *boundary_curve; 
+	static Terrain *base_terrain;
+	void computeShadowCurve();
+	void computeBoundaryCurve();
 public:
-	Silhouette(std::vector<glm::vec3 > _coordinates, Terrain* _terrain):
-	coordinates(_coordinates), terrain(_terrain)
-	{	
-		NUM_V = coordinates.size();
-		NUM_EXPANDED_VERTICES = NUM_V * 3;
-		expanded_vertices = new GLfloat[NUM_V * 3];
-		setupSilhouette();
-		setupShadow();
-		setupBoundary();
+	Silhouette()
+	{
+		silhouette_stroke =  new Stroke();
+		// shadow_curve =  new Stroke();
+		// boundary_curve =  new Stroke();
 	}
-	void setupShadow();
-	void setupBoundary();
-	// temp 
-	Silhouette(Terrain* _terrain);
-	~Silhouette();
-	void setupSilhouette();
-	Shadow* getShadow() {
-		return shadow;
+	static void setTerrain(Terrain *_terrain){base_terrain = _terrain;}
+	
+	void setup(unsigned int &shader_program){
+		silhouette_stroke->setup(shader_program);
 	}
-	Boundary* getBoundary() {
-		return boundary;
+	void draw(unsigned int &shader_program){
+		silhouette_stroke->draw(shader_program);
+	}
+	void addSilhouetteVertex(glm::vec3 vertex){
+		silhouette_stroke->update(vertex);
 	}
 };
 

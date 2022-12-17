@@ -30,7 +30,10 @@ public:
         pitch = -35.1519f;
         yaw = -40.6623f;
     }
-
+    inline glm::vec3 getOrigin(){return cam_pos;}
+    inline glm::vec3 getLookAt(){return cam_pos + cam_front;}
+    inline glm::mat4 getProjection(){return projection_t;}
+    inline glm::mat4 getView(){return view_t;}
     void setViewTransformation(unsigned int &shaderProgram);
     void setProjectionTransformation(unsigned int &shaderProgram);
     void setCamPos(unsigned int &shaderProgram);

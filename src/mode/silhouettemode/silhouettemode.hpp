@@ -2,19 +2,28 @@
 #define SILHOUETTE_MODE_H
 
 #include <stroke/silhouette/silhouette.hpp>
-
+#include <camera/camera.hpp>
+#include <vector>
 
 class SilhouetteMode
 {
 private:
     bool drawing;
-    Silhouette *silhouette_stroke;
+    Camera *cam;
+    Silhouette *stroke;
+    std::vector<GLfloat> coordinates;
+    void addSilhouette();
+    glm::vec3 getWorldPos(double x, double y);
+
 public:
-    SilhouetteMode()
+    SilhouetteMode(Camera *_cam)
     {
+        cam = _cam;
+        stroke = new Silhouette();
         drawing = false;
-        // silhouette_stroke = new Silhouette();
     }
+    void setupSilhouette(unsigned int &shader_program) { stroke->setup(shader_program); }
+    void drawSilhouette(unsigned int &shader_program) { stroke->draw(shader_program); }
     void process_input(GLFWwindow *window, float delta_time);
 };
 

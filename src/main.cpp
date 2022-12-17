@@ -28,10 +28,10 @@ int main(int, char **)
 	unsigned int shader_program = createProgram("../shaders/vshader.vs", "../shaders/fshader.fs");
 	unsigned int shader_program_2 = createProgram("../shaders/polyline.vert", "../shaders/polyline.geom", "../shaders/polyline.frag");
 
-	SilhouetteMode *smode = new SilhouetteMode();
 	Camera *cam = new Camera(glm::vec3(-500.0f, 300.0f, 350.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
 							 45.0f, 0.1f, 10000.0f, window);
 
+	SilhouetteMode *smode = new SilhouetteMode(cam);
 	Terrain *base_terrain = new Terrain(100, 100, glm::vec3(0, 0, 0), 500, 500);
 
 	glUseProgram(shader_program);
@@ -54,6 +54,8 @@ int main(int, char **)
 
 	cam->setProjectionTransformation(shader_program_2);
 	cam->setViewTransformation(shader_program_2);
+
+	smode->setupSilhouette(shader_program_2);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -102,6 +104,18 @@ int main(int, char **)
 		glUseProgram(shader_program);
 		base_terrain->draw(shader_program);
 
+		glUseProgram(shader_program_2);
+			smode->drawSilhouette(shader_program_2);
+		// switch (ui.get_mode())
+		// {
+		// case SILHOUETTE:
+			// smode->drawSilhouette(shader_program_2);
+			// break;
+// 
+		// default:
+			// break;
+		// }
+// 
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		glfwSwapBuffers(window);
 		glfwPollEvents();

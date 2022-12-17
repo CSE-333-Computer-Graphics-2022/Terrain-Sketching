@@ -22,8 +22,6 @@ public:
 	coordinates(_coordinates)
 	{	
 		NUM_V = coordinates.size();
-		NUM_EXPANDED_VERTICES = NUM_V * 3;
-		expanded_vertices = new GLfloat[NUM_V * 3];
 		setupShadow();
 	}
 	~Shadow();
