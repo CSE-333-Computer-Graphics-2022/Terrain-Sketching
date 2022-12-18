@@ -28,6 +28,12 @@ public:
 
 	void addVertex(glm::vec3 vertex);
 
+	glm::vec3 getClosestPoint(glm::vec3 point);
+
+// :>><<<<<<
+	bool insideBoundary(glm::vec3 point);
+	GLint coordToIndex(glm::vec3 point);
+
 	//Drawable functions
 	void setup(unsigned int &shader_program);
 

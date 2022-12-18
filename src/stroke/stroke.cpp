@@ -27,6 +27,64 @@ void Stroke::addVertex(glm::vec3 vertex){
 	glBindVertexArray(0);
 }
 
+// return the closest point to P
+glm::vec3 Stroke::getClosestPoint(glm::vec3 point) {
+	glm::vec3 closest_point = this->getVertex(0);
+	GLfloat min_dis = glm::distance(closest_point, point);
+	for(int i = 0; i < expanded_vertices.size()/3; i++) {
+		GLfloat dis = glm::distance(getVertex(i), point);
+		if(dis < min_dis) {
+			min_dis = dis;
+			closest_point = getVertex(i);
+		}
+	}
+
+	return closest_point;
+}
+
+
+// traverse line and find num of intersections xD
+bool Stroke::insideBoundary(glm::vec3 point) {
+	GLfloat del_z = 1e-3;
+	GLfloat del_x = 1e-3;
+	int num_steps = (500)/glm::min(del_x, del_z);
+	
+	int num_intersections = 0;
+	glm::vec3 curr_point = point;
+	GLfloat error_prec = 1e-3;
+	for(int i = 0; i < num_steps; i++) {
+		glm::vec3 closest_point = this->getClosestPoint(curr_point);
+		// check only for x and z
+		GLfloat diff_error = glm::max(glm::abs(closest_point.x - point.x), glm::abs(closest_point.z - point.z));
+		if(diff_error < error_prec) {
+			num_intersections++;
+		}
+		curr_point = glm::vec3(curr_point.x + del_x, curr_point.y, curr_point.z + del_z);
+	}
+
+	if(num_intersections % 2 == 0) {
+		// outside boundary
+		return false;
+	}
+	return true;
+}
+
+
+GLint Stroke::coordToIndex(glm::vec3 point) {
+	int idx = -1;
+
+	for(int i = 0; i < expanded_vertices.size()/3; i++) {
+		glm::vec3 stroke_point = this->getVertex(i);
+		if(stroke_point == point) {
+			idx = i;
+		}
+	}
+
+	return idx;
+}
+
+
+
 //Update this function for dynamic drawing
 void Stroke::setup(unsigned int &shader_program) {
 	glUseProgram(shader_program);

@@ -27,6 +27,8 @@ public:
     void setupSilhouette(unsigned int &shader_program) { stroke->setup(shader_program); }
     void drawSilhouette(unsigned int &shader_program) { stroke->draw(shader_program); }
     void process_input(GLFWwindow *window, float delta_time);
+    void deformTerrain();
+    GLfloat getDeformationWeight(glm::vec3 point, glm::vec3 shadow_point, glm::vec3 boundary_point);
 };
 
 #endif

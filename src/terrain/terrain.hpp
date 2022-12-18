@@ -41,13 +41,26 @@ public:
 	GLfloat getHeight(GLuint idx) {
 		return height_map[(idx*DIM) + 1];
 	}
-	GLuint coordToIndex(float x, float z);
 
+	glm::vec3 getCoord(GLuint idx) {
+		return glm::vec3(height_map[(idx*DIM)], height_map[(idx*DIM) + 1], height_map[(idx*DIM) + 2]);
+	}
+
+	GLuint coordToIndex(float x, float z);
+	GLuint getNumV() {
+		return NUM_V;
+	}
+
+	void addHeight(GLfloat del_height, GLuint idx) {
+		height_map[(idx*DIM) + 1] += del_height;
+		updateNormals(height_map[idx*DIM],height_map[idx*DIM + 2]);
+	}
 
 	//Drawable functions
 	void setup(unsigned int &shader_program);
 
 	void draw(unsigned int &shader_program);
+	void update();
 };
 
 #endif

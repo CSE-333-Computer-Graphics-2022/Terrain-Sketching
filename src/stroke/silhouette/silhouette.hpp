@@ -37,6 +37,19 @@ public:
 	void addSilhouetteVertex(glm::vec3 vertex){
 		silhouette_stroke->addVertex(vertex);
 	}
+
+	Stroke* getShadowCurve() {
+		return shadow_curve;
+	}
+
+	Stroke* getBoundaryCurve() {
+		return boundary_curve;
+	}
+
+	Stroke* getSilhouetteCurve() {
+		return silhouette_stroke;
+	}
+
 };
 
 
