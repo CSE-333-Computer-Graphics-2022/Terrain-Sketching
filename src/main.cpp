@@ -12,6 +12,8 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include <mode/silhouettemode/silhouettemode.hpp>
+#include <mode/regionmode/regionmode.hpp>
+#include <mode/aerialmode/aerialmode.hpp>
 #include <terrain/terrain.hpp>
 #include <ui/ui.hpp>
 
@@ -22,8 +24,8 @@ int main(int, char **)
 	ImGuiIO &io = ImGui::GetIO(); // Create IO
 	UI ui = UI();
 
-	float last_time = 0;
-	float delta_time = 0;
+	double last_time = 0;
+	double delta_time = 0;
 
 	unsigned int shader_program = createProgram("../shaders/vshader.vs", "../shaders/fshader.fs");
 	unsigned int shader_program_2 = createProgram("../shaders/polyline.vert", "../shaders/polyline.geom", "../shaders/polyline.frag");
@@ -31,35 +33,35 @@ int main(int, char **)
 	Camera *cam = new Camera(glm::vec3(-500.0f, 300.0f, 350.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
 							 45.0f, 0.1f, 10000.0f, window);
 
-	Terrain *base_terrain = new Terrain(100, 100, glm::vec3(0, 0, 0), 500, 500);
+	Terrain *base_terrain = new Terrain(100, 100, glm::vec3(0, 0, 0), (double)500.0, (double)500.0);
 
 	glUseProgram(shader_program);
 	base_terrain->setup(shader_program);
 	unsigned int lightPosWorld_uniform = getUniform(shader_program, "lightPosWorld");
-	glUniform3f(lightPosWorld_uniform, 10, 20, 0);
+	glUniform3f(lightPosWorld_uniform, 100, 200, 100);
 	unsigned int lightColor_uniform = getUniform(shader_program, "lightColor");
 	glUniform3f(lightColor_uniform, 1, 1, 1);
 
 	cam->setProjectionTransformation(shader_program);
 	cam->setViewTransformation(shader_program);
 
-	SilhouetteMode *smode = new SilhouetteMode(cam,base_terrain);
+	SilhouetteMode *smode = new SilhouetteMode(cam,base_terrain,shader_program_2);
+	RegionMode *rmode = new RegionMode(cam,base_terrain,shader_program_2);
+	AerialMode *amode = new AerialMode(cam,base_terrain,shader_program_2);
 	glUseProgram(shader_program_2);
 	unsigned int thicknessUniform = getUniform(shader_program_2, "Thickness");
 	glUniform1f(thicknessUniform, 2.5);
 	unsigned int miterLimitUniform = getUniform(shader_program_2, "MiterLimit");
 	glUniform1f(miterLimitUniform, 0.5);
 	unsigned int viewPortUniform = getUniform(shader_program_2, "Viewport");
-	glUniform2f(viewPortUniform, (GLfloat)SCREEN_H, (GLfloat)SCREEN_W);
+	glUniform2f(viewPortUniform, (GLdouble)SCREEN_H, (GLdouble)SCREEN_W);
 
 	cam->setProjectionTransformation(shader_program_2);
 	cam->setViewTransformation(shader_program_2);
 
-	smode->setupSilhouette(shader_program_2);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
-	// glEnable(GL_CULL_FACE);
 	while (!glfwWindowShouldClose(window))
 	{
 		// Start the Dear ImGui frame
@@ -71,7 +73,7 @@ int main(int, char **)
 			ui.sidebar();
 		}
 
-		float curr_time = static_cast<float>(glfwGetTime());
+		double curr_time = static_cast<double>(glfwGetTime());
 		delta_time = curr_time - last_time;
 		last_time = curr_time;
 
@@ -81,6 +83,14 @@ int main(int, char **)
 			{
 			case SILHOUETTE:
 				smode->process_input(window, delta_time);
+				break;
+
+			case REGION:
+				rmode->process_input(window,delta_time);
+				break;
+
+			case AERIAL:
+				amode->process_input(window,delta_time);
 				break;
 
 			default:
@@ -105,16 +115,22 @@ int main(int, char **)
 		base_terrain->draw(shader_program);
 
 		glUseProgram(shader_program_2);
-			smode->drawSilhouette(shader_program_2);
-		// switch (ui.get_mode())
-		// {
-		// case SILHOUETTE:
-			// smode->drawSilhouette(shader_program_2);
-			// break;
-// 
-		// default:
-			// break;
-		// }
+		switch (ui.get_mode())
+		{
+		case SILHOUETTE:
+			smode->drawSilhouette();
+			break;
+		case REGION:
+			rmode->drawRegion();
+			break;
+
+		case AERIAL:
+			amode->drawAerial();
+			break;
+
+		default:
+			break;
+		}
 // 
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		glfwSwapBuffers(window);

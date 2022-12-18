@@ -33,6 +33,9 @@ public:
 // :>><<<<<<
 	bool insideBoundary(glm::vec3 point);
 	GLint coordToIndex(glm::vec3 point);
+	float getVariance();
+	float getProperVariance();
+	glm::vec3 getCentroid();
 
 	//Drawable functions
 	void setup(unsigned int &shader_program);

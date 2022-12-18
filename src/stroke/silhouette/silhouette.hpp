@@ -16,6 +16,7 @@ private:
 	Terrain *base_terrain;
 public:
 	void computeShadowBoundaryCurve();
+	void computeBoundaryCurve();
 	Silhouette(Terrain * _terrain)
 	{
 		base_terrain = _terrain;

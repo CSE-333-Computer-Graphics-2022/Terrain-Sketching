@@ -29,17 +29,17 @@ void Stroke::addVertex(glm::vec3 vertex){
 
 // return the closest point to P
 glm::vec3 Stroke::getClosestPoint(glm::vec3 point) {
-	glm::vec3 closest_point = this->getVertex(0);
-	GLfloat min_dis = glm::distance(closest_point, point);
-	for(int i = 0; i < expanded_vertices.size()/3; i++) {
+	GLfloat closest_point = 0;
+	GLfloat min_dis = glm::distance(getVertex(closest_point), point);
+	for(int i = 1; i < expanded_vertices.size()/3; i++) {
 		GLfloat dis = glm::distance(getVertex(i), point);
 		if(dis < min_dis) {
 			min_dis = dis;
-			closest_point = getVertex(i);
+			closest_point = i;
 		}
 	}
 
-	return closest_point;
+	return getVertex(closest_point);
 }
 
 
@@ -112,3 +112,38 @@ void Stroke::setup(unsigned int &shader_program) {
 
 }
 
+
+float Stroke::getVariance()
+{
+	float mean = 0;
+	for(int i = 1; i < expanded_vertices.size()/3; i++)
+		mean += (expanded_vertices[i*3+1]-expanded_vertices[(i-1)*3 + 1]);
+	mean /= (expanded_vertices.size()/3 - 1);
+	float var = 0;
+	for(int i = 1; i < expanded_vertices.size()/3; i++)
+		var += ((expanded_vertices[i*3+1]-expanded_vertices[(i-1)*3 + 1])- mean)*((expanded_vertices[i*3+1]-expanded_vertices[(i-1)*3 + 1])- mean);
+	var /= (expanded_vertices.size()/3 - 1);
+	return var;
+}
+
+float Stroke::getProperVariance()
+{
+	float mean = 0;
+	for(int i = 0; i < expanded_vertices.size()/3; i++)
+		mean += (expanded_vertices[i*3+1]);
+	mean /= expanded_vertices.size()/3;
+	float var = 0;
+	for(int i = 0; i < expanded_vertices.size()/3; i++)
+		var += (expanded_vertices[i*3+1]- mean)*(expanded_vertices[i*3+1]- mean);
+	var /= expanded_vertices.size()/3;
+	return var;
+}
+
+glm::vec3 Stroke::getCentroid()
+{
+	glm::vec3 cent = glm::vec3();
+	for(int i = 0; i < expanded_vertices.size()/3; i++)
+		cent += getVertex(i);
+	cent /= (expanded_vertices.size()/3);
+	return cent;
+}
