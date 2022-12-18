@@ -13,26 +13,29 @@ class Silhouette
 {
 private:
 	Stroke *silhouette_stroke, *shadow_curve, *boundary_curve; 
-	static Terrain *base_terrain;
-	void computeShadowCurve();
-	void computeBoundaryCurve();
+	Terrain *base_terrain;
 public:
-	Silhouette()
+	void computeShadowBoundaryCurve();
+	Silhouette(Terrain * _terrain)
 	{
+		base_terrain = _terrain;
 		silhouette_stroke =  new Stroke();
-		// shadow_curve =  new Stroke();
-		// boundary_curve =  new Stroke();
+		shadow_curve =  new Stroke();
+		boundary_curve =  new Stroke();
 	}
-	static void setTerrain(Terrain *_terrain){base_terrain = _terrain;}
 	
 	void setup(unsigned int &shader_program){
 		silhouette_stroke->setup(shader_program);
+		shadow_curve->setup(shader_program);
+		boundary_curve->setup(shader_program);
 	}
 	void draw(unsigned int &shader_program){
 		silhouette_stroke->draw(shader_program);
+		shadow_curve->draw(shader_program);
+		boundary_curve->draw(shader_program);
 	}
 	void addSilhouetteVertex(glm::vec3 vertex){
-		silhouette_stroke->update(vertex);
+		silhouette_stroke->addVertex(vertex);
 	}
 };
 

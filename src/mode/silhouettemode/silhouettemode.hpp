@@ -12,14 +12,16 @@ private:
     Camera *cam;
     Silhouette *stroke;
     std::vector<GLfloat> coordinates;
+    Terrain *base_terrain;
     void addSilhouette();
     glm::vec3 getWorldPos(double x, double y, int display_w, int display_h);
 
 public:
-    SilhouetteMode(Camera *_cam)
+    SilhouetteMode(Camera *_cam, Terrain *_terrain)
     {
         cam = _cam;
-        stroke = new Silhouette();
+        base_terrain = _terrain;
+        stroke = new Silhouette(_terrain);
         drawing = false;
     }
     void setupSilhouette(unsigned int &shader_program) { stroke->setup(shader_program); }

@@ -28,29 +28,18 @@ void Camera::process_keys(GLFWwindow *window, float deltaTime)
 {
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         deltaTime = 10 * deltaTime;
-    bool mod = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS;
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        if (mod)
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
             cam_pos += deltaTime * SPEED * glm::vec3(0.0f, 1.0f, 0.0f);
-        else
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
             cam_pos += deltaTime * SPEED * cam_front;
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        if (mod)
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
             cam_pos -= deltaTime * SPEED * glm::vec3(0.0f, 1.0f, 0.0f);
-        else
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
             cam_pos -= deltaTime * SPEED * cam_front;
-    }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    {
         cam_pos -= deltaTime * SPEED * glm::normalize(glm::cross(cam_front, cam_up));
-    }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    {
         cam_pos += deltaTime * SPEED * glm::normalize(glm::cross(cam_front, cam_up));
-    }
 }
 
 void Camera::mouse_motion(double xpos, double ypos)

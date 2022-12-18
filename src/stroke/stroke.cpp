@@ -14,14 +14,15 @@ void Stroke::draw(unsigned int &shader_program) {
 	glDisable(GL_LINE_SMOOTH);
 }
 
-void Stroke::update(glm::vec3 vertex){
+void Stroke::addVertex(glm::vec3 vertex){
 	if(expanded_vertices.size()/3 >= MAX_VERTICES)return;
 	expanded_vertices.push_back(vertex.x);
 	expanded_vertices.push_back(vertex.y);
 	expanded_vertices.push_back(vertex.z);
+	GLfloat temp[] = {vertex.x,vertex.y,vertex.z};
 	glBindVertexArray(*vao);
 	glBindBuffer(GL_ARRAY_BUFFER, *vbo);
-	glBufferSubData(GL_ARRAY_BUFFER,0,expanded_vertices.size()*sizeof(GLfloat),expanded_vertices.data());
+	glBufferSubData(GL_ARRAY_BUFFER,(expanded_vertices.size()-3)*sizeof(GLfloat),3*sizeof(GLfloat),temp);
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glBindVertexArray(0);
 }

@@ -31,7 +31,6 @@ int main(int, char **)
 	Camera *cam = new Camera(glm::vec3(-500.0f, 300.0f, 350.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
 							 45.0f, 0.1f, 10000.0f, window);
 
-	SilhouetteMode *smode = new SilhouetteMode(cam);
 	Terrain *base_terrain = new Terrain(100, 100, glm::vec3(0, 0, 0), 500, 500);
 
 	glUseProgram(shader_program);
@@ -44,6 +43,7 @@ int main(int, char **)
 	cam->setProjectionTransformation(shader_program);
 	cam->setViewTransformation(shader_program);
 
+	SilhouetteMode *smode = new SilhouetteMode(cam,base_terrain);
 	glUseProgram(shader_program_2);
 	unsigned int thicknessUniform = getUniform(shader_program_2, "Thickness");
 	glUniform1f(thicknessUniform, 2.5);

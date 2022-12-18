@@ -1,7 +1,7 @@
 sm
 1. draw s curve
 2. edit s curve
-3. render s sh b curve
+3. compute and draw s sh b curve
 4. edit sh and b curve
 5. generate terrain
 
@@ -15,5 +15,7 @@ silhouette
 
 opengl specific stuff
 
+r = o + t(p - o)
 
-look at a way to dynamically sketch
+P = x.n =
+

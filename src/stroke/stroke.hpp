@@ -23,7 +23,10 @@ public:
 		modelT = glm::identity<glm::mat4>();
 	}
 
-	void update(glm::vec3 vertex);
+	inline int getSize(){return expanded_vertices.size()/3;}
+	inline glm::vec3 getVertex(int i){return glm::vec3(expanded_vertices[i*3],expanded_vertices[i*3+1],expanded_vertices[i*3+2]);}
+
+	void addVertex(glm::vec3 vertex);
 
 	//Drawable functions
 	void setup(unsigned int &shader_program);
