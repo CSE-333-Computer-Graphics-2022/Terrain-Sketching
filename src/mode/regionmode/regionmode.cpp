@@ -59,6 +59,12 @@ void RegionMode::process_input(GLFWwindow *window, float delta_time)
 
 glm::vec3 RegionMode::getWorldPos(double x, double y, int display_w, int display_h, glm::vec3 anchor)
 {
+    /*
+    Method to convert Screen Space 2D mouse position to the 3D world space coordinates. 
+    Works by first converting the coordinate into the viewing frustum of camera space.
+    Then a simple ray test to find the intersection with plane passing through anchor is done.
+    */
+
     glm::mat4 invVP = glm::inverse(cam->getProjection() * cam->getView());
     glm::vec4 near = glm::vec4((x / (display_w / 2.0) - 1.0), -1 * (y / (display_h / 2.0) - 1.0), -1, 1.0);
     glm::vec4 far = glm::vec4((x / (display_w / 2.0) - 1.0), -1 * (y / (display_h / 2.0) - 1.0), 1, 1.0);

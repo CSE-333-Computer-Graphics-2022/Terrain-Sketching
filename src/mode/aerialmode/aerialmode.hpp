@@ -5,10 +5,17 @@
 #include "stroke/silhouette/silhouette.hpp"
 #include <vector>
 
+/*
+Aerial Mode:
+    Implementation of the Aerial Mode. 
+    Works by drawing the base plane shadow first and then silhouette on top.
+*/
+
+
 class AerialMode
 {
     int drawing_stage; //0 new 1 drawing shadow 2 drawing silhouette
-    std::vector<Silhouette *>strokes;
+    std::vector<Silhouette *>strokes; //Multiple Strokes
     Silhouette *current_stroke;
     Terrain *base_terrain;
     Camera *cam;

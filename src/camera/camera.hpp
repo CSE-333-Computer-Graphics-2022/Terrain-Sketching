@@ -5,6 +5,12 @@
 #include <globals.hpp>
 #include <utils/utils.hpp>
 
+/*
+Camera class that manipulates the view of the user. 
+Can be moved with keys and looked around with mouse.
+Responsible for setting up the view and perspective matrix.
+Inspired from www.learnopengl.com
+*/
 class Camera
 {
 private:

@@ -2,6 +2,11 @@
 #define UI_H
 #include <globals.hpp>
 
+/*
+UI Class
+Draws the sidebar and handles mode switching.
+*/
+
 class UI{  
     private:      
         int programMode; 

@@ -6,7 +6,10 @@
 #include <vector>
 #include <utils/utils.hpp>
 
-// #include <GL/glew.h>
+/*
+Base stroke class that is the parent of all different sketches of modes.
+Draws and updates the sketch points using glSubBufferData.
+*/
 
 class Stroke : Drawable
 {

@@ -8,6 +8,14 @@
 #include <stdio.h>
 #include <utils/utils.hpp>
 
+/*
+Custom terrain class that initializes a subdivided base plane for terrain deformation.
+Rendered by using our triangle stripping method that avoids degenerate triangles and duplicate vertices.
+height_map = NUM_V*3 expanded vertex array of x,y,z values of vertices.
+index_map = NUM_I indices into height_map for proper triangulation.
+normal_map = NUM_V*3 expanded vertex array of normal x,y,z vector of respective vertex in height_map.
+*/
+
 class Terrain : Drawable
 {
 private:
@@ -58,7 +66,6 @@ public:
 
 	//Drawable functions
 	void setup(unsigned int &shader_program);
-
 	void draw(unsigned int &shader_program);
 	void update();
 };

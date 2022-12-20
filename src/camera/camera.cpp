@@ -42,6 +42,7 @@ void Camera::process_keys(GLFWwindow *window, float deltaTime)
         cam_pos += deltaTime * SPEED * glm::normalize(glm::cross(cam_front, cam_up));
 }
 
+//Taken from learnopengl.com camera tutorial.
 void Camera::mouse_motion(double xpos, double ypos)
 {
     if (dragging)

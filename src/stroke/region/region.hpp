@@ -4,6 +4,12 @@
 #include "stroke/stroke.hpp"
 #include "terrain/terrain.hpp"
 
+/*
+Class that defines instances of strokes in Region mode.
+region_stroke = boundary curve defined by user
+noise_curve = noise curve defined by user
+*/
+
 class Region
 {
     Stroke *region_stroke, *noise_curve;

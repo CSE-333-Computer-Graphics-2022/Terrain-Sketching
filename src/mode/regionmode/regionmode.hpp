@@ -5,6 +5,12 @@
 #include <camera/camera.hpp>
 #include <vector>
 
+/*
+    Region Mode:
+        Implementation of the Region Mode.
+    Works by first drawing a boundary curve and then drawing a noisy stroke that is propagated throughout the terrain.
+*/
+
 class RegionMode
 {
 private:

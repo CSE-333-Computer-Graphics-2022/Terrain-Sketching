@@ -5,6 +5,12 @@
 #include <camera/camera.hpp>
 #include <vector>
 
+/*
+Silhouette Mode:
+    Implementation of the Silhouette Mode.
+    Works by drawing the silhouette curve, projecting the shadow curve and deforming the terrain accordingly.
+*/
+
 class SilhouetteMode
 {
 private:

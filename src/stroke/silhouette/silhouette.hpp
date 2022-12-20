@@ -9,6 +9,13 @@
 #include <glm/glm.hpp>
 
 
+/*
+Class that defines instances of silhouettes in Silhouette Mode.
+silhouette_stroke = the silhouette curve drawn by the user.
+shadow_curve = shadow curve automatically computed as silhouette subtended over the terrain.
+boundary_curve = boundary curve automatically computed as a function of shadow with constant distance in between tapering off to the edges
+*/
+
 class Silhouette
 {
 private:
