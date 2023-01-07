@@ -9,3 +9,7 @@
 3. Implementation of the terrain deformation algorithm, given the user sketches as constraints. 
 4. Standard implementation of Blinn-Phong lighting model.
 
+## Visuals
+
+![Terrain Delformation Screenshots](/Screenshots/image_1.jpeg)
+![Terrain Delformation Screenshots](/Screenshots/image_2.jpeg)
